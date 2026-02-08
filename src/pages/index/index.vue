@@ -1,18 +1,16 @@
 <template>
-  <view class="content">
-    <image class="logo" src="/static/logo.png"></image>
-
-    <t-button/>
+  <div class="content">
+    <t-button theme="primary">哈哈</t-button>
 
     <view class="text-area">
       <text class="title">{{ title }}</text>
     </view>
-  </view>
+  </div>
 </template>
 
 <script setup>
-import TButton from '@tdesign/uniapp/button/button.vue'
 import { ref } from 'vue'
+import TButton from '@tdesign/uniapp/button/button.vue'
 
 const title = ref('Hello World2')
 </script>
