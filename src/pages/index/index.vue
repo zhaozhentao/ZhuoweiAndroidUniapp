@@ -2,9 +2,10 @@
   <div class="content">
     <t-button theme="primary">哈哈</t-button>
 
-    <view class="text-area">
-      <text class="title">{{ title }}</text>
-    </view>
+    <e-chart
+        ref="eChartRef"
+        style="height: 400px"
+        @ready="initEChart" />
   </div>
 </template>
 
@@ -12,7 +13,44 @@
 import { ref } from 'vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
-const title = ref('Hello World2')
+const eChartRef = ref(null);
+
+const option = {
+  title: {
+    text: '大圆机',
+    left: 'center',
+    top: 'center'
+  },
+  animation: true,
+  series: [
+    {
+      type: 'pie',
+      startAngle: 90,
+      data: [
+        {
+          value: 120,
+          name: 'A'
+        },
+        {
+          value: 120,
+          name: 'B'
+        },
+        {
+          value: 120,
+          name: 'C'
+        }
+      ],
+      radius: ['40%', '50%'],
+      label: {
+        position: 'inside'
+      }
+    }
+  ]
+};
+
+function initEChart() {
+  eChartRef.value.init(option)
+}
 </script>
 
 <style>
@@ -21,24 +59,6 @@ const title = ref('Hello World2')
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50rpx;
-}
-
-.text-area {
-  display: flex;
-  justify-content: center;
-}
-
-.title {
-  font-size: 36rpx;
-  color: #8f8f94;
+  padding: 16px;
 }
 </style>
