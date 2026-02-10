@@ -12,12 +12,18 @@
       "style": {
         "navigationBarTitleText": "设置"
       }
+    },
+    {
+      "path": "pages/settings/add",
+      "style": {
+        "navigationBarTitleText": "添加组合"
+      }
     }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Android",
-    "navigationBarBackgroundColor": "white",
+    "navigationBarBackgroundColor": "#F7F8FA",
     "backgroundColor": "white"
   }
 }

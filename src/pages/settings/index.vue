@@ -10,7 +10,7 @@
         theme="primary"
         @click="add"
         block>
-      添加
+      添加组合
     </t-button>
   </div>
 </template>
@@ -20,7 +20,7 @@ import TEmpty from '@tdesign/uniapp/empty/empty.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
 function add() {
-  uni.navigateTo({ url: '/pages/add/index' })
+  uni.navigateTo({ url: '/pages/settings/add' })
 }
 </script>
 
