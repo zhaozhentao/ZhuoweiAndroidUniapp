@@ -4,25 +4,15 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "App",
-        "app-plus": {
-          "titleNView": {
-            "buttons": [
-              {
-                "text": "哈哈",
-                "fontSize": "16px",
-                "float": "right"
-              }
-            ]
-          }
-        }
+        "navigationBarTitleText": "卓纬大圆机",
+        "navigationStyle": "custom"
       }
     }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarTitleText": "Android",
+    "navigationBarBackgroundColor": "white",
+    "backgroundColor": "white"
   }
 }

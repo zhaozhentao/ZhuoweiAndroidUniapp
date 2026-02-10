@@ -1,16 +1,20 @@
 <template>
   <div class="content">
-    <t-button theme="primary">哈哈</t-button>
+    <div style="text-align: right">
+      <t-button>设置</t-button>
+    </div>
 
     <e-chart
         ref="eChartRef"
-        style="height: 400px"
-        @ready="initEChart" />
+        style="height: 300px; margin-top: 16px"
+        @ready="initEChart"/>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import TRow from '@tdesign/uniapp/row/row.vue'
+import TCol from '@tdesign/uniapp/col/col.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
 const eChartRef = ref(null);
@@ -40,7 +44,7 @@ const option = {
           name: 'C'
         }
       ],
-      radius: ['40%', '50%'],
+      radius: ['80%', '95%'],
       label: {
         position: 'inside'
       }
@@ -51,14 +55,14 @@ const option = {
 function initEChart() {
   eChartRef.value.init(option)
 }
+
+function onNavigationBarButtonTap() {
+  console.log('onNavigationButtonTap')
+}
 </script>
 
-<style>
+<style scoped>
 .content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 16px;
 }
 </style>
