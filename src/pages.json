@@ -4,8 +4,13 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "卓纬大圆机",
         "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/settings/index",
+      "style": {
+        "navigationBarTitleText": "设置"
       }
     }
   ],

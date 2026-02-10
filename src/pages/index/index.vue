@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div style="text-align: right">
-      <t-button>设置</t-button>
+      <t-button @click="settings" variant="text" size="small">设置</t-button>
     </div>
 
     <e-chart
@@ -56,13 +56,11 @@ function initEChart() {
   eChartRef.value.init(option)
 }
 
-function onNavigationBarButtonTap() {
-  console.log('onNavigationButtonTap')
+function settings() {
+  uni.navigateTo({ url: '/pages/settings/index'})
 }
 </script>
 
 <style scoped>
-.content {
-  padding: 16px;
-}
+
 </style>
