@@ -33,7 +33,7 @@
 
       <div class="container">
         <t-tag
-            v-for="item in combos"
+            v-for="(item, index) in combos"
             :key="item.id"
             closable
             size="large"
@@ -41,7 +41,7 @@
             :theme="getTagTheme(item.label)"
             :variant="getTagClass(item.label)"
             @close="remove(item.id)">
-          {{ item.label }}
+          {{ index + 1 }}. {{ item.label }}
         </t-tag>
 
         <div class="empty" v-if="!combos.length">
@@ -76,7 +76,7 @@
 
       <div class="container">
         <t-tag
-            v-for="item in arranges"
+            v-for="(item, index) in arranges"
             :key="item.id"
             closable
             size="large"
@@ -84,7 +84,7 @@
             :theme="getTagTheme(item.label)"
             :variant="getTagClass(item.label)"
             @close="removeArrange(item.id)">
-          {{ item.label }}
+          {{ index + 1 }}. {{ item.label }}
         </t-tag>
 
         <div class="empty" v-if="!arranges.length">
@@ -210,6 +210,8 @@ function save() {
     uni.setStorageSync(key, list)
 
     uni.showToast({ title: '保存成功', icon: 'success' })
+
+    setTimeout(() => uni.navigateBack(), 1000)
   } catch (e) {
     uni.showToast({ title: '保存失败', icon: 'none' })
   }
