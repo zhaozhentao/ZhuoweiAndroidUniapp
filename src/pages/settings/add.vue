@@ -95,10 +95,11 @@
 
     <div class="card">
       <t-input
-          v-model="alias"
-          style="padding-left: 0"
-          :borderless="true"
           label="配置别名"
+          :value="alias"
+          @change="onInputChange"
+          :borderless="true"
+          style="padding-left: 0"
           placeholder="请输入配置别名如：一号大圆机"/>
     </div>
 
@@ -171,6 +172,10 @@ function getTagClass(label) {
   }
 }
 
+function onInputChange(value) {
+  alias.value = value.value
+}
+
 function save() {
   if (!combos.value.length) {
     uni.showToast({ title: '请先确定组合', icon: 'none' })
@@ -188,11 +193,22 @@ function save() {
   }
 
   try {
-    uni.setStorageSync('machine-settings-config', {
+    const key = 'machine-settings-config'
+    let list = []
+
+    const stored = uni.getStorageSync(key)
+    if (Array.isArray(stored)) {
+      list = stored
+    }
+
+    list.push({
       alias: alias.value,
       combos: combos.value,
       arranges: arranges.value,
     })
+
+    uni.setStorageSync(key, list)
+
     uni.showToast({ title: '保存成功', icon: 'success' })
   } catch (e) {
     uni.showToast({ title: '保存失败', icon: 'none' })
