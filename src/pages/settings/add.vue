@@ -14,7 +14,7 @@
           </t-button>
 
           <t-button
-              theme="primary"
+              theme="light"
               size="small"
               class="actions"
               @click="addCombo('含圈')">
@@ -22,7 +22,6 @@
           </t-button>
 
           <t-button
-              theme="primary"
               size="small"
               @click="addCombo('平圈')">
             平圈
@@ -33,16 +32,17 @@
       <t-divider/>
 
       <div class="container">
-        <t-badge
+        <t-tag
             v-for="item in combos"
             :key="item.id"
-            count="x"
-            :offset="[0, 2]"
-            aria-role="button"
-            @click="remove(item.id)"
-            class="badge-item">
-          <t-button>{{ item.label }}</t-button>
-        </t-badge>
+            closable
+            size="large"
+            class="combo-tag"
+            :theme="getTagTheme(item.label)"
+            :variant="getTagClass(item.label)"
+            @close="remove(item.id)">
+          {{ item.label }}
+        </t-tag>
 
         <div class="empty" v-if="!combos.length">
           请点击卡片右上角按钮添加组合
@@ -86,6 +86,7 @@ import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TEmpty from '@tdesign/uniapp/empty/empty.vue'
 import TBadge from '@tdesign/uniapp/badge/badge.vue'
+import TTag from '@tdesign/uniapp/tag/tag.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 import TDivider from '@tdesign/uniapp/divider/divider.vue'
 
@@ -100,6 +101,28 @@ function addCombo(type) {
 
 function remove(id) {
   combos.value = combos.value.filter((item) => item.id !== id)
+}
+
+function getTagTheme(label) {
+  switch (label) {
+    case '出圈':
+      return 'primary'
+    case '含圈':
+      return 'primary'
+    case '平圈':
+      return 'default'
+  }
+}
+
+function getTagClass(label) {
+  switch (label) {
+    case '出圈':
+      return 'dark'
+    case '含圈':
+      return 'light'
+    case '平圈':
+      return 'light'
+  }
 }
 </script>
 
@@ -140,7 +163,7 @@ function remove(id) {
   white-space: nowrap;
 }
 
-.badge-item {
+.combo-tag {
   flex: 0 0 auto;
 }
 
