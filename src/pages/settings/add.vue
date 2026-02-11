@@ -218,6 +218,10 @@ function save() {
 }
 </script>
 
+<style>
+@import "@/styles/common.css";
+</style>
+
 <style scoped>
 .actions {
   margin-right: 12px;
@@ -227,17 +231,6 @@ function save() {
   position: fixed;
   bottom: 20px;
   width: calc(100% - 24px);
-}
-
-.card {
-  width: 100%;
-  margin: 12px auto;
-  padding: 12px;
-  border-radius: 12px;
-  background-color: #fff;
-  box-sizing: border-box;
-  box-shadow: 0 4px 12px 2px rgba(0, 0, 0, 0.12);
-  border: none;
 }
 
 .card_head {
