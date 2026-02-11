@@ -105,10 +105,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import TRow from '@tdesign/uniapp/row/row.vue'
-import TCol from '@tdesign/uniapp/col/col.vue'
-import TEmpty from '@tdesign/uniapp/empty/empty.vue'
-import TBadge from '@tdesign/uniapp/badge/badge.vue'
 import TTag from '@tdesign/uniapp/tag/tag.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 import TDivider from '@tdesign/uniapp/divider/divider.vue'
@@ -209,7 +205,7 @@ function getTagClass(label) {
 .empty {
   color: rgba(0, 0, 0, 0.4);
   text-align: center;
-  line-height: 40px;
+  line-height: 28px;
   width: 100%;
 }
 </style>
