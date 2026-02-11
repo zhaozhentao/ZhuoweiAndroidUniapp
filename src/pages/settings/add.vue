@@ -55,16 +55,39 @@
         <span>排列</span>
 
         <div>
-          <t-button theme="primary" size="small" class="actions">组合</t-button>
+          <t-button
+              theme="primary"
+              size="small"
+              class="actions"
+              @click="addArrange('组合')">
+            组合
+          </t-button>
 
-          <t-button theme="primary" size="small">针门</t-button>
+          <t-button
+              theme="light"
+              size="small"
+              @click="addArrange('针门')">
+            针门
+          </t-button>
         </div>
       </div>
 
       <t-divider/>
 
       <div class="container">
-        <div class="empty">
+        <t-tag
+            v-for="item in arranges"
+            :key="item.id"
+            closable
+            size="large"
+            class="combo-tag"
+            :theme="getTagTheme(item.label)"
+            :variant="getTagClass(item.label)"
+            @close="removeArrange(item.id)">
+          {{ item.label }}
+        </t-tag>
+
+        <div class="empty" v-if="!arranges.length">
           请点击卡片右上角按钮进行排列
         </div>
       </div>
@@ -91,9 +114,17 @@ import TButton from '@tdesign/uniapp/button/button.vue'
 import TDivider from '@tdesign/uniapp/divider/divider.vue'
 
 const combos = ref([])
+const arranges = ref([])
 
 function addCombo(type) {
   combos.value.push({
+    id: Date.now() + Math.random(),
+    label: type,
+  })
+}
+
+function addArrange(type) {
+  arranges.value.push({
     id: Date.now() + Math.random(),
     label: type,
   })
@@ -103,11 +134,17 @@ function remove(id) {
   combos.value = combos.value.filter((item) => item.id !== id)
 }
 
+function removeArrange(id) {
+  arranges.value = arranges.value.filter((item) => item.id !== id)
+}
+
 function getTagTheme(label) {
   switch (label) {
     case '出圈':
+    case '组合':
       return 'primary'
     case '含圈':
+    case '针门':
       return 'primary'
     case '平圈':
       return 'default'
@@ -117,8 +154,10 @@ function getTagTheme(label) {
 function getTagClass(label) {
   switch (label) {
     case '出圈':
+    case '组合':
       return 'dark'
     case '含圈':
+    case '针门':
       return 'light'
     case '平圈':
       return 'light'
