@@ -1,21 +1,22 @@
 <template>
   <div class="content">
-    <div
-        class="item-header card"
-        v-if="configs.length"
-        v-for="(item, index) in configs"
-        :key="index">
-      <span class="alias">{{ item.alias }}</span>
+    <block v-if="configs.length">
+      <div
+          class="item"
+          v-for="(item, index) in configs"
+          :key="index">
+        <span class="alias">{{ item.alias }}</span>
 
-      <div>
-        <t-button
-            size="small"
-            theme="danger"
-            @click="removeConfig(index)">
-          删除
-        </t-button>
+        <div>
+          <t-button
+              size="small"
+              theme="danger"
+              @click="removeConfig(index)">
+            删除
+          </t-button>
+        </div>
       </div>
-    </div>
+    </block>
 
     <t-empty
         v-else
@@ -77,10 +78,16 @@ function removeConfig(index) {
   width: calc(100% - 24px);
 }
 
-.item-header {
+.item {
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.item:first-child {
+  padding-top: 0;
 }
 
 .alias {
