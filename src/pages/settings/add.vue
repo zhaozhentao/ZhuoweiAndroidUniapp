@@ -178,12 +178,12 @@ function onInputChange(value) {
 
 function save() {
   if (!combos.value.length) {
-    uni.showToast({ title: '请先确定组合', icon: 'none' })
+    uni.showToast({ title: '您还没有设置组合', icon: 'none' })
     return
   }
 
   if (!arranges.value.length) {
-    uni.showToast({ title: '请先确定排列', icon: 'none' })
+    uni.showToast({ title: '您还没有设置排列', icon: 'none' })
     return
   }
 
