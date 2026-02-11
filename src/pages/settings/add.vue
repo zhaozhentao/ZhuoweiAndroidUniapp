@@ -93,10 +93,19 @@
       </div>
     </div>
 
+    <div class="card">
+      <t-input
+          v-model="alias"
+          style="padding-left: 0"
+          :borderless="true"
+          label="配置别名"
+          placeholder="请输入配置别名如：一号大圆机"/>
+    </div>
+
     <t-button
         class="confirm"
         theme="primary"
-        @click="add"
+        @click="save"
         block>
       保存
     </t-button>
@@ -106,9 +115,11 @@
 <script setup>
 import { ref } from 'vue'
 import TTag from '@tdesign/uniapp/tag/tag.vue'
+import TInput from '@tdesign/uniapp/input/input.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 import TDivider from '@tdesign/uniapp/divider/divider.vue'
 
+const alias = ref('')
 const combos = ref([])
 const arranges = ref([])
 
@@ -157,6 +168,34 @@ function getTagClass(label) {
       return 'light'
     case '平圈':
       return 'light'
+  }
+}
+
+function save() {
+  if (!combos.value.length) {
+    uni.showToast({ title: '请先确定组合', icon: 'none' })
+    return
+  }
+
+  if (!arranges.value.length) {
+    uni.showToast({ title: '请先确定排列', icon: 'none' })
+    return
+  }
+
+  if (!alias.value.trim()) {
+    uni.showToast({ title: '配置别名不能为空', icon: 'none' })
+    return
+  }
+
+  try {
+    uni.setStorageSync('machine-settings-config', {
+      alias: alias.value,
+      combos: combos.value,
+      arranges: arranges.value,
+    })
+    uni.showToast({ title: '保存成功', icon: 'success' })
+  } catch (e) {
+    uni.showToast({ title: '保存失败', icon: 'none' })
   }
 }
 </script>
