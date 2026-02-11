@@ -10,6 +10,15 @@
         <div>
           <t-button
               size="small"
+              theme="primary"
+              variant="outline"
+              style="margin-right: 8px"
+              @click="removeConfig(index)">
+            使用
+          </t-button>
+
+          <t-button
+              size="small"
               theme="danger"
               @click="removeConfig(index)">
             删除
@@ -60,8 +69,18 @@ function add() {
 }
 
 function removeConfig(index) {
-  configs.value.splice(index, 1)
-  uni.setStorageSync('machine-settings-config', configs.value)
+  uni.showModal({
+    title: '确认删除',
+    content: '确定要删除该配置吗？',
+    confirmText: '删除',
+    cancelText: '取消',
+    success: (res) => {
+      if (res.confirm) {
+        configs.value.splice(index, 1)
+        uni.setStorageSync('machine-settings-config', configs.value)
+      }
+    },
+  })
 }
 </script>
 
