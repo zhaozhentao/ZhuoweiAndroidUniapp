@@ -13,7 +13,7 @@
               theme="primary"
               variant="outline"
               style="margin-right: 8px"
-              @click="removeConfig(index)">
+              @click="accept(index)">
             使用
           </t-button>
 
@@ -81,6 +81,13 @@ function removeConfig(index) {
       }
     },
   })
+}
+
+function accept(index) {
+  uni.$emit('configSelect', configs.value[index])
+
+  // 返回上一页
+  uni.navigateBack()
 }
 </script>
 

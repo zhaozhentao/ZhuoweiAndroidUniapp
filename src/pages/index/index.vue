@@ -12,12 +12,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
-const eChartRef = ref(null);
+const eChartRef = ref(null)
+const selectedConfig = ref(null)
 
 const option = {
   title: {
@@ -50,14 +51,20 @@ const option = {
       }
     }
   ]
-};
+}
 
 function initEChart() {
   eChartRef.value.init(option)
 }
 
+onMounted(() => {
+  uni.$on('configSelect', (data) => {
+    console.log(data)
+  })
+})
+
 function settings() {
-  uni.navigateTo({ url: '/pages/settings/index'})
+  uni.navigateTo({ url: '/pages/settings/index' })
 }
 </script>
 
