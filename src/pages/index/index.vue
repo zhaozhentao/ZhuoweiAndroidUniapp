@@ -13,12 +13,9 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
-import TRow from '@tdesign/uniapp/row/row.vue'
-import TCol from '@tdesign/uniapp/col/col.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
 const eChartRef = ref(null)
-const selectedConfig = ref(null)
 
 const option = {
   title: {
@@ -45,7 +42,7 @@ const option = {
           name: 'C'
         }
       ],
-      radius: ['80%', '95%'],
+      radius: ['70%', '95%'],
       label: {
         position: 'inside'
       }
@@ -59,27 +56,28 @@ function initEChart() {
 
 onMounted(() => {
   uni.$on('configSelect', (data) => {
-    // 保存当前选中的配置
-    selectedConfig.value = data
-
-    if (!data) {
-      return
-    }
+    // 保存数据时，已经做了非空校验
+    const { alias, combos = [], arranges = [] } = data
 
     // 用配置别名作为图表标题
-    if (data.alias) {
-      option.title.text = data.alias
-    }
+    option.title.text = alias
 
-    // 根据组合数据生成饼图数据
-    if (Array.isArray(data.combos) && data.combos.length) {
-      option.series[0].data = data.combos.map((item) => {
-        return {
-          value: 1,
-          name: item.label
-        }
-      })
-    }
+    // 根据 arranges 顺序生成饼图数据：
+    // label 为「组合」的，用 combos 依次展开
+    // 其它步骤（如「针门」）则按步骤本身依次插入
+    const result = []
+
+    arranges.forEach((step) => {
+      if (step.label === '组合') {
+        combos.forEach((item) => {
+          result.push({ name: item.label || '未命名', value: 1 })
+        })
+      } else {
+        result.push({ name: step.label || '未命名', value: 1 })
+      }
+    })
+
+    option.series[0].data = result
 
     // 重新渲染图表
     eChartRef.value.setOption(option)
