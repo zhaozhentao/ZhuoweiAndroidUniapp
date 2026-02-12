@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
@@ -59,8 +59,36 @@ function initEChart() {
 
 onMounted(() => {
   uni.$on('configSelect', (data) => {
-    console.log(data)
+    // 保存当前选中的配置
+    selectedConfig.value = data
+
+    if (!data) {
+      return
+    }
+
+    // 用配置别名作为图表标题
+    if (data.alias) {
+      option.title.text = data.alias
+    }
+
+    // 根据组合数据生成饼图数据
+    if (Array.isArray(data.combos) && data.combos.length) {
+      option.series[0].data = data.combos.map((item) => {
+        return {
+          value: 1,
+          name: item.label
+        }
+      })
+    }
+
+    // 重新渲染图表
+    eChartRef.value.setOption(option)
   })
+})
+
+onUnmounted(() => {
+  // 页面卸载时取消监听，避免重复触发
+  uni.$off('configSelect')
 })
 
 function settings() {
