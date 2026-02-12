@@ -34,7 +34,7 @@
       <div class="container">
         <t-tag
             v-for="(item, index) in combos"
-            :key="item.id"
+            :key="index"
             closable
             size="large"
             class="combo-tag"
@@ -77,7 +77,7 @@
       <div class="container">
         <t-tag
             v-for="(item, index) in arranges"
-            :key="item.id"
+            :key="index"
             closable
             size="large"
             class="combo-tag"
@@ -125,17 +125,11 @@ const combos = ref([])
 const arranges = ref([])
 
 function addCombo(type) {
-  combos.value.push({
-    id: Date.now() + Math.random(),
-    label: type,
-  })
+  combos.value.push({ label: type })
 }
 
 function addArrange(type) {
-  arranges.value.push({
-    id: Date.now() + Math.random(),
-    label: type,
-  })
+  arranges.value.push({ label: type })
 }
 
 function remove(id) {
