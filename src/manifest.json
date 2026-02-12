@@ -68,5 +68,12 @@
     "uniStatistics": {  
         "enable": false
     },
+    "h5": {
+      "publicPath": "/android",
+      "router": {
+        "mode": "hash",
+        "base": "./"
+      }
+    },
     "vueVersion" : "3"
 }

@@ -84,13 +84,7 @@ function removeConfig(index) {
 }
 </script>
 
-<style>
-@import "@/styles/common.css";
-</style>
-
 <style scoped>
-@import "@/styles/common.css";
-
 .add {
   position: fixed;
   bottom: 20px;
