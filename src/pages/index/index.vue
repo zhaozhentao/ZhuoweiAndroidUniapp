@@ -16,7 +16,11 @@
         :key="index">
         <div class="grid-index">{{ index + 1 }}</div>
 
-        <div class="grid-name">{{ item.name }}</div>
+        <div class="grid-name">类型: {{ item.name }}</div>
+
+        <div class="grid-name">峰值: </div>
+
+        <div class="grid-name">时间点: </div>
       </div>
     </div>
   </div>
@@ -89,7 +93,8 @@ onMounted(() => {
       }
     })
 
-    option.series[0].data = result
+    // 表格中逆时针显示，需要倒序
+    option.series[0].data = result.slice().reverse()
 
     tableData.value = result
 
@@ -111,23 +116,21 @@ function settings() {
 <style scoped>
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 8px;
   margin-top: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }
 
 .grid-item {
   background-color: #ffffff;
-  border-radius: 8px;
-  padding: 8px 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 8px 12px;
   box-sizing: border-box;
-  text-align: center;
+  border: 1px solid #eee;
+  margin: 0 -1px -1px 0;
 }
 
 .grid-index {
-  font-size: 12px;
   color: #999;
+  font-size: 12px;
   margin-bottom: 4px;
 }
 
