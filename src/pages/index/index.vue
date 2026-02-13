@@ -4,30 +4,38 @@
       <t-button @click="settings" variant="text" size="small">设置</t-button>
     </div>
 
-    <e-chart
-        ref="eChartRef"
-        style="height: 300px; margin-top: 16px"
-        @ready="initEChart"/>
+    <t-row>
+      <t-col span="8">
+        <e-chart
+            ref="eChartRef"
+            style="height: 300px; margin-top: 16px"
+            @ready="initEChart"/>
+      </t-col>
 
-    <div class="grid-container">
-      <div
-        class="grid-item"
-        v-for="(item, index) in tableData"
-        :key="index">
-        <div class="grid-index">{{ index + 1 }}</div>
+      <t-col span="16">
+        <div class="grid-container">
+          <div
+              class="grid-item"
+              v-for="(item, index) in tableData"
+              :key="index">
+            <div class="grid-index">{{ index + 1 }}</div>
 
-        <div class="grid-name">类型: {{ item.name }}</div>
+            <div class="grid-name">类型: {{ item.name }}</div>
 
-        <div class="grid-name">峰值: </div>
+            <div class="grid-name">峰值: </div>
 
-        <div class="grid-name">时间点: </div>
-      </div>
-    </div>
+            <div class="grid-name">时间点: </div>
+          </div>
+        </div>
+      </t-col>
+    </t-row>
   </div>
 </template>
 
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
+import TRow from '@tdesign/uniapp/row/row.vue'
+import TCol from '@tdesign/uniapp/col/col.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
 const eChartRef = ref(null)
