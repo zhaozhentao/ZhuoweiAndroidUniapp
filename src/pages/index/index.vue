@@ -8,6 +8,17 @@
         ref="eChartRef"
         style="height: 300px; margin-top: 16px"
         @ready="initEChart"/>
+
+    <div class="grid-container">
+      <div
+        class="grid-item"
+        v-for="(item, index) in tableData"
+        :key="index">
+        <div class="grid-index">{{ index + 1 }}</div>
+
+        <div class="grid-name">{{ item.name }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,6 +27,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
 const eChartRef = ref(null)
+const tableData = ref([])
 
 const option = {
   title: {
@@ -79,6 +91,8 @@ onMounted(() => {
 
     option.series[0].data = result
 
+    tableData.value = result
+
     // 重新渲染图表
     eChartRef.value.setOption(option)
   })
@@ -95,5 +109,31 @@ function settings() {
 </script>
 
 <style scoped>
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
 
+.grid-item {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 8px 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.grid-index {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.grid-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
 </style>
