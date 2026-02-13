@@ -44,7 +44,7 @@ const option = {
       ],
       radius: ['70%', '95%'],
       label: {
-        position: 'inside'
+        position: 'outside'
       }
     }
   ]
