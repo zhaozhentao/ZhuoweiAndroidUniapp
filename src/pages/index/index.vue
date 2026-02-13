@@ -78,18 +78,16 @@ onMounted(() => {
     // 用配置别名作为图表标题
     option.title.text = alias
 
-    // 根据 arranges 顺序生成饼图数据：
-    // label 为「组合」的，用 combos 依次展开
-    // 其它步骤（如「针门」）则按步骤本身依次插入
+    // 根据 arranges 顺序生成饼图数据, label 为「组合」的，用 combos 依次展开, 其它步骤（如「针门」）则按步骤本身依次插入
     const result = []
 
     arranges.forEach((step) => {
       if (step.label === '组合') {
         combos.forEach((item) => {
-          result.push({ name: item.label || '未命名', value: 1 })
+          result.push({ name: item.label, value: 1 })
         })
       } else {
-        result.push({ name: step.label || '未命名', value: 1 })
+        result.push({ name: step.label, value: 1 })
       }
     })
 
