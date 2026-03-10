@@ -1,6 +1,6 @@
 {
-    "name" : "",
-    "appid" : "",
+    "name" : "卓纬大圆机",
+    "appid" : "__UNI__B4F9C9C",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -41,9 +41,27 @@
                 ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "dSYMs" : false
+            },
             /* SDK配置 */
             "sdkConfigs" : {}
+        },
+        "nativePlugins" : {
+            "HuaweiScanModule" : {
+                "__plugin_info__" : {
+                    "name" : "HuaweiScanModule",
+                    "description" : "哦哦哦",
+                    "platforms" : "Android",
+                    "url" : "",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : false,
+                    "bought" : -1,
+                    "pid" : "",
+                    "parameters" : {}
+                }
+            }
         }
     },
     /* 快应用特有相关 */
@@ -65,15 +83,15 @@
     "mp-toutiao" : {
         "usingComponents" : true
     },
-    "uniStatistics": {  
-        "enable": false
+    "uniStatistics" : {
+        "enable" : false
     },
-    "h5": {
-      "publicPath": "/android",
-      "router": {
-        "mode": "hash",
-        "base": "./"
-      }
+    "h5" : {
+        "publicPath" : "/android",
+        "router" : {
+            "mode" : "hash",
+            "base" : "./"
+        }
     },
     "vueVersion" : "3"
 }

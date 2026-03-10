@@ -38,6 +38,8 @@ import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
+const module = uni.requireNativePlugin("HuaweiScanModule-HuaweiScanModule")
+
 const eChartRef = ref(null)
 const tableData = ref([])
 
@@ -78,7 +80,17 @@ function initEChart() {
   eChartRef.value.init(option)
 }
 
+function settings() {
+  uni.navigateTo({ url: '/pages/settings/index' })
+}
+
 onMounted(() => {
+  if (module) {
+    module.toast()
+  } else {
+    console.log('加载失败')
+  }
+
   uni.$on('configSelect', (data) => {
     // 保存数据时，已经做了非空校验
     const { alias, combos = [], arranges = [] } = data
@@ -113,10 +125,6 @@ onUnmounted(() => {
   // 页面卸载时取消监听，避免重复触发
   uni.$off('configSelect')
 })
-
-function settings() {
-  uni.navigateTo({ url: '/pages/settings/index' })
-}
 </script>
 
 <style scoped>
