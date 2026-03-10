@@ -38,7 +38,7 @@ import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
-const module = uni.requireNativePlugin("HuaweiScanModule-HuaweiScanModule")
+const module = uni.requireNativePlugin("UsbModule1-UsbModule1")
 
 const eChartRef = ref(null)
 const tableData = ref([])
@@ -86,7 +86,7 @@ function settings() {
 
 onMounted(() => {
   if (module) {
-    module.toast()
+    module.connect()
   } else {
     console.log('加载失败')
   }
