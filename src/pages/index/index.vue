@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div style="text-align: right">
-      <t-button @click="settings" variant="text" size="small">设置</t-button>
+      <t-button @click="connect" variant="text" size="small">设置</t-button>
     </div>
 
     <t-row>
@@ -82,6 +82,11 @@ function initEChart() {
 
 function settings() {
   uni.navigateTo({ url: '/pages/settings/index' })
+}
+
+function connect() {
+  uni.showToast({ title: '尝试连接' })
+  module.connect()
 }
 
 onMounted(() => {

@@ -47,7 +47,13 @@
                 "dSYMs" : false
             },
             /* SDK配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {},
+            "splashscreen" : {
+                "androidStyle" : "default",
+                "android" : {
+                    "xxhdpi" : "/Users/zhaozhentao/Desktop/lo.png"
+                }
+            }
         },
         "nativePlugins" : {
             "UsbModule1" : {
