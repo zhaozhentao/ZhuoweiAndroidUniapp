@@ -5,6 +5,9 @@ import App from "./App.vue";
 import '@tdesign/uniapp/common/style/theme/index.less'
 export function createApp() {
 	const app = createSSRApp(App);
+
+	app.config.globalProperties.$statusBarHeight = uni.getSystemInfoSync().statusBarHeight
+
 	return {
 		app,
 	};

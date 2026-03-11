@@ -1,12 +1,12 @@
 <script>
 export default {
-  onLaunch: function () {
+  onLaunch() {
 
   },
-  onShow: function () {
+  onShow() {
 
   },
-  onHide: function () {
+  onHide() {
 
   },
 }
