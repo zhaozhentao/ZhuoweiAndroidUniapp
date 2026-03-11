@@ -89,6 +89,7 @@ onMounted(() => {
     module.connect()
   } else {
     console.log('加载失败')
+    uni.showToast({ title: '加载模块失败', icon: 'error' })
   }
 
   uni.$on('configSelect', (data) => {
