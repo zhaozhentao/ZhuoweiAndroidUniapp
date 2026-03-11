@@ -1,7 +1,9 @@
 <template>
   <div class="content">
     <div style="text-align: right">
-      <t-button @click="connect" variant="text" size="small">设置</t-button>
+      <t-button @click="connect" variant="text" size="small">连接</t-button>
+
+      <t-button @click="send" variant="text" size="small">发送</t-button>
     </div>
 
     <t-row>
@@ -22,9 +24,9 @@
 
             <div class="grid-name">类型: {{ item.name }}</div>
 
-            <div class="grid-name">峰值: </div>
+            <div class="grid-name">峰值:</div>
 
-            <div class="grid-name">时间点: </div>
+            <div class="grid-name">时间点:</div>
           </div>
         </div>
       </t-col>
@@ -85,8 +87,22 @@ function settings() {
 }
 
 function connect() {
-  uni.showToast({ title: '尝试连接' })
   module.connect()
+}
+
+function uint8ArrayToBase64(uint8Arr) {
+  let binary = ''
+  const len = uint8Arr.byteLength
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(uint8Arr[i])
+  }
+  return btoa(binary)
+}
+
+function send() {
+  const byteArray = new Uint8Array([0x08, 0x03, 0x00, 0x1A, 0x00, 0x01, 0xA5, 0x54])
+
+  module.send(uint8ArrayToBase64(byteArray))
 }
 
 onMounted(() => {
