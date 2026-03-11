@@ -4,6 +4,8 @@
       <t-button @click="connect" variant="text" size="small">连接</t-button>
 
       <t-button @click="send" variant="text" size="small">发送</t-button>
+
+      <t-button @click="settings" variant="text" size="small">设置</t-button>
     </div>
 
     <t-row>
