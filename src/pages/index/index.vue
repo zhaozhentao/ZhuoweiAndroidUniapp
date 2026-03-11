@@ -40,7 +40,7 @@ import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 
-const module = uni.requireNativePlugin("UsbModule1-UsbModule1")
+const module = uni.requireNativePlugin("UsbModule")
 
 const eChartRef = ref(null)
 const tableData = ref([])

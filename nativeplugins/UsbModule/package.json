@@ -1,6 +1,6 @@
 {
-  "name": "UsbModule1",
-  "id": "UsbModule1",
+  "name": "UsbModule",
+  "id": "UsbModule",
   "version": "1.0.7",
   "description": "哦哦哦",
   "_dp_type": "nativeplugin",
@@ -8,7 +8,7 @@
     "android": {
       "plugins": [{
         "type": "module",
-        "name": "UsbModule1-UsbModule1",
+        "name": "UsbModule",
         "class": "io.dcloud.uniplugin.UsbModule"
       }],
       "integrateType": "aar"

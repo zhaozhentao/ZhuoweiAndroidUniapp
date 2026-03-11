@@ -56,9 +56,9 @@
             }
         },
         "nativePlugins" : {
-            "UsbModule1" : {
+            "UsbModule" : {
                 "__plugin_info__" : {
-                    "name" : "UsbModule1",
+                    "name" : "UsbModule",
                     "description" : "哦哦哦",
                     "platforms" : "Android",
                     "url" : "",
