@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div style="height: 20px"/>
+    <div style="height: 12px"/>
 
     <div style="text-align: right">
       <t-button @click="connect" variant="text" size="small">连接</t-button>
@@ -42,17 +42,12 @@
 import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
-import { onMounted, onUnmounted, ref, getCurrentInstance  } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 const module = uni.requireNativePlugin("UsbModule")
 
-const instance = getCurrentInstance()
-
-const statusBarHeight = instance.appContext.config.globalProperties.$statusBarHeight
-
-console.log('statusBarHeight:' + statusBarHeight)
-
 const eChartRef = ref(null)
+
 const tableData = ref([])
 
 const option = {
