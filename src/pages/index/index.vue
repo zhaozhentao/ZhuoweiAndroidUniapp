@@ -99,7 +99,19 @@ function read() {
 
 onMounted(() => {
   plus.globalEvent.addEventListener('usb_data', e => {
-    uni.showToast({ title: '收到原生消息' + e.data, icon: 'none' })
+    const hexString = e.data
+    const byteArray = []
+    
+    // 每两位切割并转换为十进制
+    for (let i = 0; i < hexString.length; i += 2) {
+      const byte = hexString.substr(i, 2)
+      byteArray.push(parseInt(byte, 16))
+    }
+    
+    uni.showToast({ 
+      title: '收到消息：' + byteArray.join(', '), 
+      icon: 'none' 
+    })
   })
 
   uni.$on('configSelect', (data) => {
