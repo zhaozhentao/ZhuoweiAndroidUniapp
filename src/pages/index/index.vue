@@ -1,7 +1,5 @@
 <template>
-  <div class="content">
-    <div style="height: 12px"/>
-
+  <div class="content" style="padding-top: 24px">
     <div style="text-align: right">
       <t-button @click="connect" variant="text" size="small">连接</t-button>
 
