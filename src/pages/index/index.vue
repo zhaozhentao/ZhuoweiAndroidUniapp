@@ -109,12 +109,9 @@ function send() {
 }
 
 onMounted(() => {
-  if (module) {
-    module.connect()
-  } else {
-    console.log('加载失败')
-    uni.showToast({ title: '加载模块失败', icon: 'error' })
-  }
+  plus.globalEvent.addEventListener('usb_data', e => {
+    uni.showToast({ title: '收到原生消息' + e, icon: 'none' })
+  })
 
   uni.$on('configSelect', (data) => {
     // 保存数据时，已经做了非空校验
