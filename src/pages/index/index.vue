@@ -3,7 +3,9 @@
     <div style="text-align: right">
       <t-button @click="connect" variant="text" size="small">连接</t-button>
 
-      <t-button @click="read" variant="text" size="small">发送</t-button>
+      <t-button @click="write" variant="text" size="small">写</t-button>
+
+      <t-button @click="read" variant="text" size="small">读</t-button>
 
       <t-button @click="settings" variant="text" size="small">设置</t-button>
     </div>
@@ -93,8 +95,12 @@ function connect() {
   module.connect()
 }
 
+function write() {
+  module.write(0x30, 1)
+}
+
 function read() {
-  module.readRegister(0x30)
+  module.read(0x30)
 }
 
 onMounted(() => {
