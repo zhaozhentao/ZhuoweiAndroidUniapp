@@ -3,7 +3,7 @@
     <div style="text-align: right">
       <t-button @click="connect" variant="text" size="small">连接</t-button>
 
-      <t-button @click="send" variant="text" size="small">发送</t-button>
+      <t-button @click="read" variant="text" size="small">发送</t-button>
 
       <t-button @click="settings" variant="text" size="small">设置</t-button>
     </div>
@@ -93,24 +93,13 @@ function connect() {
   module.connect()
 }
 
-function uint8ArrayToBase64(uint8Arr) {
-  let binary = ''
-  const len = uint8Arr.byteLength
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(uint8Arr[i])
-  }
-  return btoa(binary)
-}
-
-function send() {
-  const byteArray = new Uint8Array([0x08, 0x03, 0x00, 0x1A, 0x00, 0x01, 0xA5, 0x54])
-
-  module.send(uint8ArrayToBase64(byteArray))
+function read() {
+  module.readRegister(0x30)
 }
 
 onMounted(() => {
   plus.globalEvent.addEventListener('usb_data', e => {
-    uni.showToast({ title: '收到原生消息' + e, icon: 'none' })
+    uni.showToast({ title: '收到原生消息' + e.data, icon: 'none' })
   })
 
   uni.$on('configSelect', (data) => {
