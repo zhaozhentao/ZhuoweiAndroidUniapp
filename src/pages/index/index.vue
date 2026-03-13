@@ -103,20 +103,54 @@ function read() {
   module.read(0x30)
 }
 
+// 带确认的写入函数
+function writeWithConfirm(address, value, timeout = 1000) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      cleanup()
+      reject(new Error(`写入超时: 0x${address.toString(16)}`))
+    }, timeout)
+
+    const handler = (e) => {
+      const hexString = e.data
+      const byteArray = []
+      for (let i = 0; i < hexString.length; i += 2) {
+        byteArray.push(parseInt(hexString.substr(i, 2), 16))
+      }
+
+      // 根据你的硬件协议判断是否是对应地址的确认响应
+      // 这里假设响应格式：[地址, 状态码, ...]
+      // 请根据实际硬件协议调整判断逻辑
+      if (byteArray[0] === address) {
+        cleanup()
+        resolve(byteArray)
+      }
+    }
+
+    const cleanup = () => {
+      clearTimeout(timer)
+      plus.globalEvent.removeEventListener('usb_data', handler)
+    }
+
+    plus.globalEvent.addEventListener('usb_data', handler)
+    module.write(address, value)
+  })
+}
+
 onMounted(() => {
   plus.globalEvent.addEventListener('usb_data', e => {
     const hexString = e.data
     const byteArray = []
-    
+
     // 每两位切割并转换为十进制
     for (let i = 0; i < hexString.length; i += 2) {
       const byte = hexString.substr(i, 2)
       byteArray.push(parseInt(byte, 16))
     }
-    
-    uni.showToast({ 
-      title: '收到消息：' + byteArray.join(', '), 
-      icon: 'none' 
+
+    uni.showToast({
+      title: '收到消息：' + byteArray.map(b => '0x' + b.toString(16).padStart(2, '0')).join(', '),
+      icon: 'none'
     })
   })
 
@@ -148,33 +182,31 @@ onMounted(() => {
     // 重新渲染图表
     eChartRef.value.setOption(option)
 
-    // 写入寄存器数据，使用延时避免连续快速写入
+    // 写入寄存器数据，等待硬件确认
     const writeRegisters = async () => {
-      // 向 0x12 寄存器写入表格项总数
-      module.write(0x12, result.length)
+      try {
+        // 向 0x12 寄存器写入表格项总数
+        await writeWithConfirm(0x12, result.length)
 
-      // 延时后再写入后续寄存器
-      await new Promise(resolve => setTimeout(resolve, 100))
-
-      // 根据表格项类型向寄存器写入数据，起始寄存器 0x30
-      for (let index = 0; index < result.length; index++) {
-        const item = result[index]
-        let value = 0
-        if (item.name === '出圈') {
-          value = 1
-        } else if (item.name === '含圈') {
-          value = 2
-        } else if (item.name === '平圈') {
-          value = 3
-        } else if (item.name === '针门') {
-          value = 0
+        // 根据表格项类型向寄存器写入数据，起始寄存器 0x30
+        for (let index = 0; index < result.length; index++) {
+          const item = result[index]
+          let value = 0
+          if (item.name === '出圈') {
+            value = 1
+          } else if (item.name === '含圈') {
+            value = 2
+          } else if (item.name === '平圈') {
+            value = 3
+          } else if (item.name === '针门') {
+            value = 0
+          }
+          await writeWithConfirm(0x30 + index, value)
         }
-        module.write(0x30 + index, value)
 
-        // 每次写入后延时 50ms
-        if (index < result.length - 1) {
-          await new Promise(resolve => setTimeout(resolve, 50))
-        }
+        uni.showToast({ title: '配置写入成功', icon: 'success' })
+      } catch (error) {
+        uni.showToast({ title: error.message, icon: 'error' })
       }
     }
     writeRegisters()
