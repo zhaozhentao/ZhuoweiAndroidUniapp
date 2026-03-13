@@ -147,6 +147,37 @@ onMounted(() => {
 
     // 重新渲染图表
     eChartRef.value.setOption(option)
+
+    // 写入寄存器数据，使用延时避免连续快速写入
+    const writeRegisters = async () => {
+      // 向 0x12 寄存器写入表格项总数
+      module.write(0x12, result.length)
+
+      // 延时后再写入后续寄存器
+      await new Promise(resolve => setTimeout(resolve, 100))
+
+      // 根据表格项类型向寄存器写入数据，起始寄存器 0x30
+      for (let index = 0; index < result.length; index++) {
+        const item = result[index]
+        let value = 0
+        if (item.name === '出圈') {
+          value = 1
+        } else if (item.name === '含圈') {
+          value = 2
+        } else if (item.name === '平圈') {
+          value = 3
+        } else if (item.name === '针门') {
+          value = 0
+        }
+        module.write(0x30 + index, value)
+
+        // 每次写入后延时 50ms
+        if (index < result.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 50))
+        }
+      }
+    }
+    writeRegisters()
   })
 })
 
