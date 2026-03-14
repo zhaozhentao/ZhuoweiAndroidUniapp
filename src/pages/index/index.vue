@@ -6,7 +6,6 @@
           ref="eChartRef"
           style="height: 300px; margin-top: 16px"
           @ready="initEChart"/>
-
       </t-row>
 
       <t-row style="margin-top: 10px;">
@@ -41,9 +40,7 @@
             class="grid-item"
             v-for="(item, index) in tableData">
             <div class="grid-index">
-              <div>
-                {{ index + 1 }}
-              </div>
+              <div>{{ index + 1 }}</div>
 
               <div v-if="index === currentIndex && isMeasuring" class="indicator" />
             </div>
@@ -75,8 +72,7 @@ const module = uni.requireNativePlugin("UsbModule")
 
 const eChartRef = ref(null)
 
-const tableData = ref([
-])
+const tableData = ref([])
 
 const option = {
   title: {
@@ -89,20 +85,7 @@ const option = {
     {
       type: 'pie',
       startAngle: 90,
-      data: [
-        {
-          value: 120,
-          name: 'A'
-        },
-        {
-          value: 120,
-          name: 'B'
-        },
-        {
-          value: 120,
-          name: 'C'
-        }
-      ],
+      data: [],
       radius: ['70%', '95%'],
       label: {
         position: 'outside'
