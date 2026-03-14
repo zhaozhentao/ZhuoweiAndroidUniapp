@@ -6,11 +6,16 @@
             ref="eChartRef"
             style="height: 300px; margin-top: 16px"
             @ready="initEChart"/>
+
+      </t-row>
+      <t-row style="margin-top: 10px;">
+        <t-button theme="primary" size="small" @click="inc">设置路号</t-button>
       </t-row>
 
       <t-row>
         {{ msg }}
       </t-row>
+
     </t-col>
 
     <t-col span="16" style="display: flex; flex-direction: column; height: 100%;">
@@ -127,6 +132,7 @@ function read() {
 }
 
 const msg = ref('')
+const currentIndex = ref(0)
 
 let pendingWrite = null
 let pendingRead = null
@@ -165,6 +171,23 @@ async function sleep(time) {
   return new Promise(resolve => setTimeout(resolve, time))
 }
 
+async function inc() {
+  if (tableData.value.length === 0) {
+    uni.showToast({ title: '请先设置针门组合', icon: 'none' })
+    return
+  }
+
+  try {
+    await writeWithConfirm(0x13, currentIndex.value)
+    uni.showToast({ title: `已设置路号: ${currentIndex.value}`, icon: 'success' })
+
+    // 递增，但不超过表格元素数量
+    currentIndex.value = (currentIndex.value + 1) % tableData.value.length
+  } catch (error) {
+    uni.showToast({ title: error.message, icon: 'error' })
+  }
+}
+
 async function start() {
   // 清空寄存器
   let res = await writeWithConfirm(0x11, 0x55)
@@ -177,16 +200,17 @@ async function start() {
 
   // 轮询最多100次，直到读取到结果为1
   let pollCount = 0
-  while (pollCount < 100) {
+  while (pollCount++ < 100) {
     res = await readWithConfirm(0xfb)
-    pollCount++
 
     if (res === 1) {
       uni.showToast({ title: `轮询成功，第${pollCount}次` })
       break
-    } else {
-      uni.showToast({ title: `res = ${res}` })
     }
+
+    // 读取路号
+    res = await readWithConfirm(0x13)
+    uni.showToast({ title: `路号 = ${res}` })
 
     await sleep(1000)
   }
@@ -286,6 +310,7 @@ onMounted(() => {
     option.series[0].data = result.slice().reverse()
 
     tableData.value = result
+    currentIndex.value = 0 // 重置路号计数器
 
     // 重新渲染图表
     eChartRef.value.setOption(option)
