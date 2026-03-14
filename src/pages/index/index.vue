@@ -19,7 +19,7 @@
       </t-row>
     </t-col>
 
-    <t-col span="16" classc="left_pannel">
+    <t-col span="16" class="left_pannel">
       <div style="display: flex; justify-content: space-between;">
         <div style="padding-left: 12px;">
           <t-button
@@ -31,7 +31,14 @@
             {{ isMeasuring ? '测量中' : '开始测量' }}
           </t-button>
 
-          <t-button v-if="tableData.length !== 0" theme="primary" size="small" @click="inc">设置路号</t-button>
+          <t-button
+            v-if="tableData.length !== 0"
+            style="margin-left: 12px"
+            theme="primary"
+            size="small"
+            @click="inc">
+            设置路号
+          </t-button>
         </div>
 
         <div style="text-align: right">
