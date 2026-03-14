@@ -1,5 +1,5 @@
 <template>
-  <t-row class="home" style="padding-top: 24px">
+  <t-row class="home">
     <t-col span="8" style="border-right: 1px solid #eee;">
       <t-row>
         <e-chart
@@ -14,7 +14,7 @@
       </t-row>
     </t-col>
 
-    <t-col span="16" style="display: flex; flex-direction: column; height: 100%;">
+    <t-col span="16" classc="left_pannel">
       <div style="display: flex; justify-content: space-between;">
         <div style="padding-left: 12px;">
           <t-button 
