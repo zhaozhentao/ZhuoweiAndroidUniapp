@@ -103,36 +103,17 @@ function read() {
   module.read(0x30)
 }
 
+let pendingWrite = null
+
 // 带确认的写入函数
 function writeWithConfirm(address, value, timeout = 1000) {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
-      cleanup()
+      pendingWrite = null
       reject(new Error(`写入超时: 0x${address.toString(16)}`))
     }, timeout)
 
-    const handler = (e) => {
-      const hexString = e.data
-      const byteArray = []
-      for (let i = 0; i < hexString.length; i += 2) {
-        byteArray.push(parseInt(hexString.substr(i, 2), 16))
-      }
-
-      // 根据你的硬件协议判断是否是对应地址的确认响应
-      // 这里假设响应格式：[地址, 状态码, ...]
-      // 请根据实际硬件协议调整判断逻辑
-      if (byteArray[0] === address) {
-        cleanup()
-        resolve(byteArray)
-      }
-    }
-
-    const cleanup = () => {
-      clearTimeout(timer)
-      plus.globalEvent.removeEventListener('usb_data', handler)
-    }
-
-    plus.globalEvent.addEventListener('usb_data', handler)
+    pendingWrite = { address, value, resolve, reject, timer }
     module.write(address, value)
   })
 }
@@ -146,6 +127,19 @@ onMounted(() => {
     for (let i = 0; i < hexString.length; i += 2) {
       const byte = hexString.substr(i, 2)
       byteArray.push(parseInt(byte, 16))
+    }
+
+    // 处理写确认
+    if (pendingWrite) {
+      const respAddress = (byteArray[2] << 8) | byteArray[3]
+      const respValue = (byteArray[4] << 8) | byteArray[5]
+
+      if (respAddress === pendingWrite.address && respValue === pendingWrite.value) {
+        clearTimeout(pendingWrite.timer)
+        pendingWrite.resolve(byteArray)
+        pendingWrite = null
+        return
+      }
     }
 
     uni.showToast({
