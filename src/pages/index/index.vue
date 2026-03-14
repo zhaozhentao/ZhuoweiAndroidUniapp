@@ -8,14 +8,10 @@
             @ready="initEChart"/>
 
       </t-row>
+
       <t-row style="margin-top: 10px;">
         <t-button theme="primary" size="small" @click="inc">设置路号</t-button>
       </t-row>
-
-      <t-row>
-        {{ msg }}
-      </t-row>
-
     </t-col>
 
     <t-col span="16" style="display: flex; flex-direction: column; height: 100%;">
@@ -131,7 +127,6 @@ function read() {
   // #endif
 }
 
-const msg = ref('')
 const currentIndex = ref(0)
 
 let pendingWrite = null
@@ -179,8 +174,7 @@ async function inc() {
 
   try {
     await writeWithConfirm(0x13, currentIndex.value)
-    uni.showToast({ title: `已设置路号: ${currentIndex.value}`, icon: 'success' })
-
+    uni.showToast({ title: `已设置路号: ${currentIndex.value}`, icon: 'none' })
     // 递增，但不超过表格元素数量
     currentIndex.value = (currentIndex.value + 1) % tableData.value.length
   } catch (error) {
@@ -194,7 +188,6 @@ async function start() {
 
   // 打开运行开关
   res = await writeWithConfirm(0xf9, 0x1)
-  msg.value += JSON.stringify(res)
 
   uni.showToast({ title: '开始轮询' })
 
