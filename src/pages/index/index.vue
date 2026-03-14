@@ -1,30 +1,30 @@
 <template>
-  <div class="content" style="padding-top: 24px">
-    <t-row>
-      <t-col span="8">
-        <t-row>
-          <e-chart
-              ref="eChartRef"
-              style="height: 300px; margin-top: 16px"
-              @ready="initEChart"/>
-        </t-row>
+  <t-row class="home" style="padding-top: 24px">
+    <t-col span="8">
+      <t-row>
+        <e-chart
+            ref="eChartRef"
+            style="height: 300px; margin-top: 16px"
+            @ready="initEChart"/>
+      </t-row>
 
-        <t-row>
-          {{ msg }}
-        </t-row>
-      </t-col>
+      <t-row>
+        {{ msg }}
+      </t-row>
+    </t-col>
 
-      <t-col span="16">
-        <div style="text-align: right">
-          <t-button @click="connect" variant="text" size="small">连接</t-button>
+    <t-col span="16" style="display: flex; flex-direction: column; height: 100%;">
+      <div style="text-align: right">
+        <t-button @click="connect" variant="text" size="small">连接</t-button>
 
-          <t-button @click="write" variant="text" size="small">写</t-button>
+        <t-button @click="write" variant="text" size="small">写</t-button>
 
-          <t-button @click="read" variant="text" size="small">读</t-button>
+        <t-button @click="read" variant="text" size="small">读</t-button>
 
-          <t-button @click="settings" variant="text" size="small">设置</t-button>
-        </div>
+        <t-button @click="settings" variant="text" size="small">设置</t-button>
+      </div>
 
+      <div style="flex: 1; overflow: auto;">
         <div v-if="tableData.length > 0">
           <div>
             <t-button theme="primary" size="small" @click="start">开始测量</t-button>
@@ -46,10 +46,10 @@
           </div>
         </div>
 
-        <t-empty v-else icon="no-result" style="margin-top: 200px" description="尚未设置针门组合，连接设备后点击右上角设置" />
-      </t-col>
-    </t-row>
-  </div>
+        <t-empty v-else icon="no-result" style="" description="尚未设置针门组合，连接设备后点击右上角设置" />
+      </div>
+    </t-col>
+  </t-row>
 </template>
 
 <script setup>
@@ -299,29 +299,10 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.grid-container {
-  display: grid;
-  margin-top: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-}
+@import './index.css';
 
-.grid-item {
-  background-color: #ffffff;
-  padding: 8px 12px;
-  box-sizing: border-box;
-  border: 1px solid #eee;
-  margin: 0 -1px -1px 0;
-}
-
-.grid-index {
-  color: #999;
-  font-size: 12px;
-  margin-bottom: 4px;
-}
-
-.grid-name {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 4px;
+page {
+  width: 100%;
+  height: 100%;
 }
 </style>
