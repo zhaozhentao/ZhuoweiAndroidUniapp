@@ -4,7 +4,7 @@
       <t-row>
         <e-chart
           ref="eChartRef"
-          style="height: 300px; margin-top: 16px"
+          style="height: 250px; margin-top: 12px"
           @ready="initEChart"/>
       </t-row>
 
@@ -283,8 +283,6 @@ async function start() {
 
       // 读取当前值
       currentReadValue.value = await readWithConfirm(0x15)
-
-      uni.showToast({ title: `当前值 ${currentReadValue.value}`, icon: 'error' })
 
       await sleep(1000)
     }
