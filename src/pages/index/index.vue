@@ -12,10 +12,16 @@
 
     <t-row>
       <t-col span="8">
+        <t-row>
         <e-chart
             ref="eChartRef"
             style="height: 300px; margin-top: 16px"
             @ready="initEChart"/>
+        </t-row>
+
+        <t-row>
+          {{ msg }}
+        </t-row>
       </t-col>
 
       <t-col span="16">
@@ -103,6 +109,8 @@ function read() {
   module.read(0x30)
 }
 
+const msg = ref('')
+
 let pendingWrite = null
 
 // 带确认的写入函数
@@ -148,7 +156,7 @@ onMounted(() => {
     })
   })
 
-  uni.$on('configSelect', (data) => {
+  uni.$on('configSelect', async (data) => {
     // 保存数据时，已经做了非空校验
     const { alias, combos = [], arranges = [] } = data
 
@@ -168,21 +176,11 @@ onMounted(() => {
       }
     })
 
-    // 表格中逆时针显示，需要倒序
-    option.series[0].data = result.slice().reverse()
-
-    tableData.value = result
-
-    // 重新渲染图表
-    eChartRef.value.setOption(option)
-
     // 写入寄存器数据，等待硬件确认
     const writeRegisters = async () => {
       try {
         // 向 0x12 寄存器写入表格项总数
-        let res = await writeWithConfirm(0x12, result.length)
-
-        uni.showToast({ title: '写总数成功' + res.length, icon: 'none' })
+        await writeWithConfirm(0x12, result.length)
 
         // 根据表格项类型向寄存器写入数据，起始寄存器 0x30
         for (let index = 0; index < result.length; index++) {
@@ -192,12 +190,26 @@ onMounted(() => {
           await writeWithConfirm(0x30 + index, value)
         }
 
-        uni.showToast({ title: '配置写入成功', icon: 'success' })
+        return 'ok'
       } catch (error) {
         uni.showToast({ title: error.message, icon: 'error' })
+        return 'error'
       }
     }
-    writeRegisters()
+
+    let res = await writeRegisters()
+
+    if (res !== 'ok') {
+      return
+    }
+
+    // 表格中逆时针显示，需要倒序
+    option.series[0].data = result.slice().reverse()
+
+    tableData.value = result
+
+    // 重新渲染图表
+    eChartRef.value.setOption(option)
   })
 })
 
