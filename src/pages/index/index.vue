@@ -3,9 +3,9 @@
     <t-col span="8" style="border-right: 1px solid #eee;">
       <t-row>
         <e-chart
-            ref="eChartRef"
-            style="height: 300px; margin-top: 16px"
-            @ready="initEChart"/>
+          ref="eChartRef"
+          style="height: 300px; margin-top: 16px"
+          @ready="initEChart"/>
 
       </t-row>
 
@@ -17,15 +17,18 @@
     <t-col span="16" style="display: flex; flex-direction: column; height: 100%;">
       <div style="display: flex; justify-content: space-between;">
         <div style="padding-left: 12px;">
-          <t-button v-if="tableData.length !== 0" theme="primary" size="small" @click="start">开始测量</t-button>
+          <t-button 
+            v-if="tableData.length !== 0" 
+            @click="start"
+            size="small" 
+            :loading="isMeasuring"
+            theme="primary">
+            {{ isMeasuring ? '测量中' : '开始测量' }}
+          </t-button>
         </div>
 
         <div style="text-align: right">
           <t-button @click="connect" variant="text" size="small">连接</t-button>
-
-          <t-button @click="write" variant="text" size="small">写</t-button>
-
-          <t-button @click="read" variant="text" size="small">读</t-button>
 
           <t-button @click="settings" variant="text" size="small">设置</t-button>
         </div>
@@ -122,18 +125,6 @@ function connect() {
   // #endif
 }
 
-function write() {
-  // #ifdef APP-PLUS
-  module.write(0x30, 1)
-  // #endif
-}
-
-function read() {
-  // #ifdef APP-PLUS
-  module.read(0x30)
-  // #endif
-}
-
 const currentIndex = ref(0)
 
 const isMeasuring = ref(false)
@@ -206,8 +197,6 @@ async function start() {
 
     // 打开运行开关
     res = await writeWithConfirm(0xf9, 0x1)
-
-    uni.showToast({ title: '开始轮询' })
 
     // 轮询最多100次，直到读取到结果为1
     let pollCount = 0
