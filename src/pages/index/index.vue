@@ -8,8 +8,14 @@
           @ready="initEChart"/>
       </t-row>
 
-      <t-row style="margin-top: 10px;">
-        <t-button theme="primary" size="small" @click="inc">设置路号</t-button>
+      <t-row style="margin-top: 12px">
+        <t-col class="item" span="6">
+          当前测量值
+        </t-col>
+
+        <t-col class="item" span="18">
+          {{ currentReadValue }}
+        </t-col>
       </t-row>
     </t-col>
 
@@ -24,6 +30,8 @@
             theme="primary">
             {{ isMeasuring ? '测量中' : '开始测量' }}
           </t-button>
+
+          <t-button v-if="tableData.length !== 0" theme="primary" size="small" @click="inc">设置路号</t-button>
         </div>
 
         <div style="text-align: right">
@@ -113,6 +121,8 @@ function connect() {
 }
 
 const currentIndex = ref(0)
+
+const currentReadValue = ref(0)
 
 const isMeasuring = ref(false)
 
