@@ -161,21 +161,39 @@ function readWithConfirm(address, timeout = 1000) {
   })
 }
 
+async function sleep(time) {
+  return new Promise(resolve => setTimeout(resolve, time))
+}
+
 async function start() {
   // 清空寄存器
   let res = await writeWithConfirm(0x11, 0x55)
 
   // 打开运行开关
   res = await writeWithConfirm(0xf9, 0x1)
+  msg.value += `<br/> ${JSON.stringify(res)}`
 
-  uni.showToast({ title: `运行开关 ${JSON.stringify(res)}}` })
+  uni.showToast({ title: '开始轮询' })
 
-  // 延时等待硬件准备
-  await new Promise(resolve => setTimeout(resolve, 100))
+  // 轮询最多100次，直到读取到结果为1
+  let pollCount = 0
+  while (pollCount < 100) {
+    res = await readWithConfirm(0xfb)
+    pollCount++
 
-  res = await readWithConfirm(0xfb)
+    if (res === 1) {
+      uni.showToast({ title: `轮询成功，第${pollCount}次` })
+      break
+    } else {
+      uni.showToast({ title: `res = ${res}` })
+    }
 
-  uni.showToast({ title: JSON.stringify(res) })
+    await sleep(1000)
+  }
+
+  if (res !== 1) {
+    uni.showToast({ title: `轮询超时，已尝试${pollCount}次`, icon: 'error' })
+  }
 }
 
 onMounted(() => {
