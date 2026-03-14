@@ -1,22 +1,12 @@
 <template>
   <div class="content" style="padding-top: 24px">
-    <div style="text-align: right">
-      <t-button @click="connect" variant="text" size="small">连接</t-button>
-
-      <t-button @click="write" variant="text" size="small">写</t-button>
-
-      <t-button @click="read" variant="text" size="small">读</t-button>
-
-      <t-button @click="settings" variant="text" size="small">设置</t-button>
-    </div>
-
     <t-row>
       <t-col span="8">
         <t-row>
-        <e-chart
-            ref="eChartRef"
-            style="height: 300px; margin-top: 16px"
-            @ready="initEChart"/>
+          <e-chart
+              ref="eChartRef"
+              style="height: 300px; margin-top: 16px"
+              @ready="initEChart"/>
         </t-row>
 
         <t-row>
@@ -25,11 +15,21 @@
       </t-col>
 
       <t-col span="16">
-        <div class="grid-container">
+        <div style="text-align: right">
+          <t-button @click="connect" variant="text" size="small">连接</t-button>
+
+          <t-button @click="write" variant="text" size="small">写</t-button>
+
+          <t-button @click="read" variant="text" size="small">读</t-button>
+
+          <t-button @click="settings" variant="text" size="small">设置</t-button>
+        </div>
+
+        <div class="grid-container" v-if="tableData.length > 0">
           <div
-              class="grid-item"
-              v-for="(item, index) in tableData"
-              :key="index">
+            :key="index"
+            class="grid-item"
+            v-for="(item, index) in tableData">
             <div class="grid-index">{{ index + 1 }}</div>
 
             <div class="grid-name">类型: {{ item.name }}</div>
@@ -39,6 +39,8 @@
             <div class="grid-name">时间点:</div>
           </div>
         </div>
+
+        <t-empty v-else icon="no-result" style="margin-top: 200px" description="尚未设置针门组合，连接设备后点击右上角设置" />
       </t-col>
     </t-row>
   </div>
@@ -47,6 +49,7 @@
 <script setup>
 import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
+import TEmpty from '@tdesign/uniapp/empty/empty.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
 
