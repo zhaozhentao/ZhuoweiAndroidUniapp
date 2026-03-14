@@ -34,16 +34,6 @@
         @change="onPingChange"
         placeholder="请输入"
         type="number"/>
-
-      <t-row>
-        <t-col class="item" span="6">
-          当前测量值
-        </t-col>
-
-        <t-col class="item" span="18">
-          {{ currentReadValue }}
-        </t-col>
-      </t-row>
     </t-col>
 
     <t-col span="16" class="left_panel">
@@ -117,11 +107,11 @@ import { onMounted, onUnmounted, ref } from 'vue'
 const module = uni.requireNativePlugin("UsbModule")
 // #endif
 
+let pendingWrite = null
+let pendingRead = null
 const chu = ref('')
 const han = ref('')
 const ping = ref('')
-let pendingWrite = null
-let pendingRead = null
 const currentIndex = ref(0)
 const isMeasuring = ref(false)
 const currentReadValue = ref(0)
