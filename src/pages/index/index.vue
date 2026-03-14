@@ -26,9 +26,9 @@
         </div>
 
         <div v-if="tableData.length > 0">
-          <t-row>
-            <t-button theme="primary" size="small">开始测量</t-button>
-          </t-row>
+          <div>
+            <t-button theme="primary" size="small" @click="start">开始测量</t-button>
+          </div>
 
           <div class="grid-container">
             <div
@@ -129,6 +129,7 @@ function read() {
 const msg = ref('')
 
 let pendingWrite = null
+let pendingRead = null
 
 // 带确认的写入函数
 function writeWithConfirm(address, value, timeout = 1000) {
@@ -145,6 +146,38 @@ function writeWithConfirm(address, value, timeout = 1000) {
   })
 }
 
+// 带确认的读取函数
+function readWithConfirm(address, timeout = 1000) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      pendingRead = null
+      reject(new Error(`读取超时: 0x${address.toString(16)}`))
+    }, timeout)
+
+    pendingRead = { address, resolve, reject, timer }
+    // #ifdef APP-PLUS
+    module.read(address)
+    // #endif
+  })
+}
+
+async function start() {
+  // 清空寄存器
+  let res = await writeWithConfirm(0x11, 0x55)
+
+  // 打开运行开关
+  res = await writeWithConfirm(0xf9, 0x1)
+
+  uni.showToast({ title: `运行开关 ${JSON.stringify(res)}}` })
+
+  // 延时等待硬件准备
+  await new Promise(resolve => setTimeout(resolve, 100))
+
+  res = await readWithConfirm(0xfb)
+
+  uni.showToast({ title: JSON.stringify(res) })
+}
+
 onMounted(() => {
   plus.globalEvent.addEventListener('usb_data', e => {
     const hexString = e.data
@@ -154,6 +187,15 @@ onMounted(() => {
     for (let i = 0; i < hexString.length; i += 2) {
       const byte = hexString.substr(i, 2)
       byteArray.push(parseInt(byte, 16))
+    }
+
+    // 处理读取响应（7个16进制数）
+    if (pendingRead && byteArray.length === 7) {
+      clearTimeout(pendingRead.timer)
+      const value = (byteArray[3] << 8) | byteArray[4]
+      pendingRead.resolve(value)
+      pendingRead = null
+      return
     }
 
     // 处理写确认
