@@ -6,24 +6,24 @@
 
         <div>
           <t-button
-              theme="primary"
-              size="small"
-              class="actions"
-              @click="addCombo('出圈')">
+            theme="primary"
+            size="small"
+            class="actions"
+            @click="addCombo('出圈')">
             出圈
           </t-button>
 
           <t-button
-              theme="light"
-              size="small"
-              class="actions"
-              @click="addCombo('含圈')">
+            theme="light"
+            size="small"
+            class="actions"
+            @click="addCombo('含圈')">
             含圈
           </t-button>
 
           <t-button
-              size="small"
-              @click="addCombo('平圈')">
+            size="small"
+            @click="addCombo('平圈')">
             平圈
           </t-button>
         </div>
@@ -33,14 +33,14 @@
 
       <div class="container">
         <t-tag
-            v-for="(item, index) in combos"
-            :key="index"
-            closable
-            size="large"
-            class="combo-tag"
-            :theme="getTagTheme(item.label)"
-            :variant="getTagClass(item.label)"
-            @close="remove(item.id)">
+          v-for="(item, index) in combos"
+          :key="index"
+          closable
+          size="large"
+          class="combo-tag"
+          :theme="getTagTheme(item.label)"
+          :variant="getTagClass(item.label)"
+          @close="remove(item.id)">
           {{ index + 1 }}. {{ item.label }}
         </t-tag>
 
@@ -56,17 +56,17 @@
 
         <div>
           <t-button
-              theme="primary"
-              size="small"
-              class="actions"
-              @click="addArrange('组合')">
+            theme="primary"
+            size="small"
+            class="actions"
+            @click="addArrange('组合')">
             组合
           </t-button>
 
           <t-button
-              theme="light"
-              size="small"
-              @click="addArrange('针门')">
+            theme="light"
+            size="small"
+            @click="addArrange('针门')">
             针门
           </t-button>
         </div>
@@ -76,14 +76,14 @@
 
       <div class="container">
         <t-tag
-            v-for="(item, index) in arranges"
-            :key="index"
-            closable
-            size="large"
-            class="combo-tag"
-            :theme="getTagTheme(item.label)"
-            :variant="getTagClass(item.label)"
-            @close="removeArrange(item.id)">
+          v-for="(item, index) in arranges"
+          :key="index"
+          closable
+          size="large"
+          class="combo-tag"
+          :theme="getTagTheme(item.label)"
+          :variant="getTagClass(item.label)"
+          @close="removeArrange(item.id)">
           {{ index + 1 }}. {{ item.label }}
         </t-tag>
 
@@ -95,19 +95,19 @@
 
     <div class="card">
       <t-input
-          label="配置别名"
-          :value="alias"
-          @change="onInputChange"
-          :borderless="true"
-          style="padding-left: 0"
-          placeholder="请输入配置别名如：一号大圆机"/>
+        label="配置别名"
+        :value="alias"
+        @change="onInputChange"
+        :borderless="true"
+        style="padding-left: 0"
+        placeholder="请输入配置别名如：一号大圆机"/>
     </div>
 
     <t-button
-        class="confirm"
-        theme="primary"
-        @click="save"
-        block>
+      class="confirm"
+      theme="primary"
+      @click="save"
+      block>
       保存
     </t-button>
   </div>
@@ -251,5 +251,9 @@ function save() {
   text-align: center;
   line-height: 28px;
   width: 100%;
+}
+
+.content {
+  padding: 12px;
 }
 </style>

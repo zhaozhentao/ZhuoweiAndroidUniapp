@@ -2,25 +2,25 @@
   <div class="content">
     <block v-if="configs.length">
       <div
-          class="item"
-          v-for="(item, index) in configs"
-          :key="index">
+        class="item"
+        v-for="(item, index) in configs"
+        :key="index">
         <span class="alias">{{ item.alias }}</span>
 
         <div>
           <t-button
-              size="small"
-              theme="primary"
-              variant="outline"
-              style="margin-right: 8px"
-              @click="accept(index)">
+            size="small"
+            theme="primary"
+            variant="outline"
+            style="margin-right: 8px"
+            @click="accept(index)">
             使用
           </t-button>
 
           <t-button
-              size="small"
-              theme="danger"
-              @click="removeConfig(index)">
+            size="small"
+            theme="danger"
+            @click="removeConfig(index)">
             删除
           </t-button>
         </div>
@@ -28,16 +28,16 @@
     </block>
 
     <t-empty
-        v-else
-        icon="no-result"
-        style="margin-top: 200px"
-        description="没有历史组合，请先添加"/>
+      v-else
+      icon="no-result"
+      style="margin-top: 200px"
+      description="没有历史组合，请先添加"/>
 
     <t-button
-        class="add"
-        theme="primary"
-        @click="add"
-        block>
+      class="add"
+      theme="primary"
+      @click="add"
+      block>
       添加组合
     </t-button>
   </div>
@@ -113,5 +113,9 @@ function accept(index) {
 .alias {
   font-weight: 600;
   font-size: 16px;
+}
+
+.content {
+  padding: 12px;
 }
 </style>
