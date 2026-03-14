@@ -77,6 +77,7 @@ import TEmpty from '@tdesign/uniapp/empty/empty.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 import TFormItem from '@tdesign/uniapp/form-item/form-item.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
+import { sleep } from '@/utils/helpers'
 
 // #ifdef APP-PLUS
 const module = uni.requireNativePlugin("UsbModule")
@@ -158,10 +159,6 @@ function readWithConfirm(address, timeout = 1000) {
     module.read(address)
     // #endif
   })
-}
-
-async function sleep(time) {
-  return new Promise(resolve => setTimeout(resolve, time))
 }
 
 async function inc() {
