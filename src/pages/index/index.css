@@ -42,7 +42,7 @@
   background: greenyellow; 
 }
 
-.left_pannel {
+.left_panel {
   display: flex; 
   flex-direction: column; 
   height: 100%;

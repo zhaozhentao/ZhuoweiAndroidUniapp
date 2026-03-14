@@ -8,7 +8,34 @@
           @ready="initEChart"/>
       </t-row>
 
-      <t-row style="margin-top: 12px">
+      <t-input
+        id="chu"
+        :value="chu"
+        label="出圈"
+        align="right"
+        @change="onChuChange"
+        placeholder="请输入"
+        type="number"/>
+
+      <t-input
+        id="han"
+        :value="han"
+        label="含圈"
+        align="right"
+        @change="onHanChange"
+        placeholder="请输入"
+        type="number"/>
+
+      <t-input
+        id="ping"
+        :value="ping"
+        label="平圈"
+        align="right"
+        @change="onPingChange"
+        placeholder="请输入"
+        type="number"/>
+
+      <t-row>
         <t-col class="item" span="6">
           当前测量值
         </t-col>
@@ -19,7 +46,7 @@
       </t-row>
     </t-col>
 
-    <t-col span="16" class="left_pannel">
+    <t-col span="16" class="left_panel">
       <div style="display: flex; justify-content: space-between;">
         <div style="padding-left: 12px;">
           <t-button
@@ -81,14 +108,18 @@
 import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TEmpty from '@tdesign/uniapp/empty/empty.vue'
+import TInput from '@tdesign/uniapp/input/input.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
-import TFormItem from '@tdesign/uniapp/form-item/form-item.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { sleep } from '@/utils/helpers'
 
 // #ifdef APP-PLUS
 const module = uni.requireNativePlugin("UsbModule")
 // #endif
+
+const chu = ref('')
+const han = ref('')
+const ping = ref('')
 
 const eChartRef = ref(null)
 
@@ -126,6 +157,18 @@ function connect() {
   // #ifdef APP-PLUS
   module.connect()
   // #endif
+}
+
+function onChuChange(value) {
+  chu.value = value.value
+}
+
+function onHanChange(value) {
+  han.value = value.value
+}
+
+function onPingChange(value) {
+  ping.value = value.value
 }
 
 const currentIndex = ref(0)
@@ -223,6 +266,8 @@ async function start() {
 
       // 读取当前值
       currentReadValue.value = await readWithConfirm(0x15)
+
+      uni.showToast({ title: `当前值 ${currentReadValue.value}`, icon: 'error' })
 
       await sleep(1000)
     }
