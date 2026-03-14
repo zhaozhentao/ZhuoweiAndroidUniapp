@@ -73,8 +73,6 @@ const module = uni.requireNativePlugin("UsbModule")
 const eChartRef = ref(null)
 
 const tableData = ref([
-  {name: 'sdf', value: 1},
-  {name: 'sdf', value: 1},
 ])
 
 const option = {
@@ -185,10 +183,15 @@ async function inc() {
   }
 
   try {
-    await writeWithConfirm(0x13, currentIndex.value)
-    uni.showToast({ title: `已设置路号: ${currentIndex.value}`, icon: 'none' })
     // 递增，但不超过表格元素数量
-    currentIndex.value = (currentIndex.value + 1) % tableData.value.length
+    let value = (currentIndex.value + 1) % tableData.value.length
+
+    await writeWithConfirm(0x13, value)
+
+    let res = await readWithConfirm(0x13)
+
+    currentIndex.value = res
+    uni.showToast({ title: `set ${value} read ${res}`, icon: 'none' })
   } catch (error) {
     uni.showToast({ title: error.message, icon: 'error' })
   }
@@ -218,7 +221,6 @@ async function start() {
 
       // 读取路号
       let index = await readWithConfirm(0x13)
-      uni.showToast({ title: `路号 = ${index}` })
 
       // 起始的寄存器是 0x102 ，每间隔 4 个寄存器是下一个保存数值的寄存器
       const addr = 0x102 + index * 4
@@ -235,8 +237,11 @@ async function start() {
     if (res !== 1) {
       uni.showToast({ title: `轮询超时，已尝试${pollCount}次`, icon: 'error' })
     }
+  } catch (error) {
+    uni.showToast({ title: error.message, icon: 'error' })
   } finally {
     isMeasuring.value = false
+    uni.showToast({ title: '退出循环', icon: 'error' })
   }
 }
 
