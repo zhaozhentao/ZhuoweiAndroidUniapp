@@ -1,6 +1,6 @@
 <template>
   <t-row class="home" style="padding-top: 24px">
-    <t-col span="8">
+    <t-col span="8" style="border-right: 1px solid #dddbdb;">
       <t-row>
         <e-chart
             ref="eChartRef"
@@ -14,22 +14,24 @@
     </t-col>
 
     <t-col span="16" style="display: flex; flex-direction: column; height: 100%;">
-      <div style="text-align: right">
-        <t-button @click="connect" variant="text" size="small">连接</t-button>
+      <div style="display: flex; justify-content: space-between;">
+        <div style="padding-left: 12px;">
+          <t-button v-if="tableData.length !== 0" theme="primary" size="small" @click="start">开始测量</t-button>
+        </div>
 
-        <t-button @click="write" variant="text" size="small">写</t-button>
+        <div style="text-align: right">
+          <t-button @click="connect" variant="text" size="small">连接</t-button>
 
-        <t-button @click="read" variant="text" size="small">读</t-button>
+          <t-button @click="write" variant="text" size="small">写</t-button>
 
-        <t-button @click="settings" variant="text" size="small">设置</t-button>
+          <t-button @click="read" variant="text" size="small">读</t-button>
+
+          <t-button @click="settings" variant="text" size="small">设置</t-button>
+        </div>
       </div>
 
-      <div style="flex: 1; overflow: auto;">
+      <div style="flex: 1; overflow: auto; padding-left: 12px; padding-right: 12px;">
         <div v-if="tableData.length > 0">
-          <div>
-            <t-button theme="primary" size="small" @click="start">开始测量</t-button>
-          </div>
-
           <div class="grid-container">
             <div
               :key="index"
@@ -46,7 +48,7 @@
           </div>
         </div>
 
-        <t-empty v-else icon="no-result" style="" description="尚未设置针门组合，连接设备后点击右上角设置" />
+        <t-empty v-else icon="no-result" style="margin-top: 120px;" description="尚未设置针门组合，连接设备后点击右上角设置" />
       </div>
     </t-col>
   </t-row>
@@ -171,7 +173,7 @@ async function start() {
 
   // 打开运行开关
   res = await writeWithConfirm(0xf9, 0x1)
-  msg.value += `<br/> ${JSON.stringify(res)}`
+  msg.value += JSON.stringify(res)
 
   uni.showToast({ title: '开始轮询' })
 
