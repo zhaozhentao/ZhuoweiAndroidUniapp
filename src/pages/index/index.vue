@@ -214,6 +214,9 @@ async function start() {
         tableData.value[index].maxValue = value
       }
 
+      // 读取当前值
+      currentReadValue.value = await readWithConfirm(0x15)
+
       await sleep(1000)
     }
 
