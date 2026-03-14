@@ -16,10 +16,10 @@
     <t-col span="16" classc="left_pannel">
       <div style="display: flex; justify-content: space-between;">
         <div style="padding-left: 12px;">
-          <t-button 
-            v-if="tableData.length !== 0" 
+          <t-button
+            v-if="tableData.length !== 0"
             @click="start"
-            size="small" 
+            size="small"
             :loading="isMeasuring"
             theme="primary">
             {{ isMeasuring ? '测量中' : '开始测量' }}
@@ -42,7 +42,7 @@
             <div class="grid-index">
               <div>{{ index + 1 }}</div>
 
-              <div v-if="index === currentIndex && isMeasuring" class="indicator" />
+              <div v-if="index === currentIndex && isMeasuring" class="indicator"/>
             </div>
 
             <div class="grid-name">类型: {{ item.name }}</div>
@@ -53,7 +53,10 @@
           </div>
         </div>
 
-        <t-empty v-else icon="no-result" style="margin-top: 120px;" description="尚未设置针门组合，连接设备后点击右上角设置" />
+        <t-empty
+          v-else icon="no-result"
+          style="margin-top: 120px;"
+          description="尚未设置针门组合，连接设备后点击右上角设置"/>
       </div>
     </t-col>
   </t-row>
@@ -64,6 +67,7 @@ import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TEmpty from '@tdesign/uniapp/empty/empty.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
+import TFormItem from '@tdesign/uniapp/form-item/form-item.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 // #ifdef APP-PLUS
