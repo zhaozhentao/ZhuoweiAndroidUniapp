@@ -37,7 +37,13 @@
             :key="index"
             class="grid-item"
             v-for="(item, index) in tableData">
-            <div class="grid-index">{{ index + 1 }}</div>
+            <div class="grid-index">
+              <div>
+                {{ index + 1 }}
+              </div>
+
+              <div v-if="index === currentIndex && isMeasuring" class="indicator" />
+            </div>
 
             <div class="grid-name">类型: {{ item.name }}</div>
 
@@ -66,7 +72,10 @@ const module = uni.requireNativePlugin("UsbModule")
 
 const eChartRef = ref(null)
 
-const tableData = ref([])
+const tableData = ref([
+  {name: 'sdf', value: 1},
+  {name: 'sdf', value: 1},
+])
 
 const option = {
   title: {
@@ -129,7 +138,10 @@ function read() {
 
 const currentIndex = ref(0)
 
+const isMeasuring = ref(false)
+
 let pendingWrite = null
+
 let pendingRead = null
 
 // 带确认的写入函数
@@ -183,42 +195,48 @@ async function inc() {
 }
 
 async function start() {
-  // 清空寄存器
-  let res = await writeWithConfirm(0x11, 0x55)
+  isMeasuring.value = true
 
-  // 打开运行开关
-  res = await writeWithConfirm(0xf9, 0x1)
+  try {
+    // 清空寄存器
+    let res = await writeWithConfirm(0x11, 0x55)
 
-  uni.showToast({ title: '开始轮询' })
+    // 打开运行开关
+    res = await writeWithConfirm(0xf9, 0x1)
 
-  // 轮询最多100次，直到读取到结果为1
-  let pollCount = 0
-  while (pollCount++ < 100) {
-    res = await readWithConfirm(0xfb)
+    uni.showToast({ title: '开始轮询' })
 
-    if (res === 1) {
-      uni.showToast({ title: `轮询成功，第${pollCount}次` })
-      break
+    // 轮询最多100次，直到读取到结果为1
+    let pollCount = 0
+    while (pollCount++ < 100) {
+      res = await readWithConfirm(0xfb)
+
+      if (res === 1) {
+        uni.showToast({ title: `轮询成功，第${pollCount}次` })
+        break
+      }
+
+      // 读取路号
+      let index = await readWithConfirm(0x13)
+      uni.showToast({ title: `路号 = ${index}` })
+
+      // 起始的寄存器是 0x102 ，每间隔 4 个寄存器是下一个保存数值的寄存器
+      const addr = 0x102 + index * 4
+      let value = await readWithConfirm(addr)
+
+      // 更新到table的峰值中
+      if (index >= 0 && index < tableData.value.length) {
+        tableData.value[index].maxValue = value
+      }
+
+      await sleep(1000)
     }
 
-    // 读取路号
-    let index = await readWithConfirm(0x13)
-    uni.showToast({ title: `路号 = ${index}` })
-
-    // 起始的寄存器是 0x102 ，每间隔 4 个寄存器是下一个保存数值的寄存器
-    const addr = 0x102 + index * 4
-    let value = await readWithConfirm(addr)
-
-    // 更新到table的峰值中
-    if (index >= 0 && index < tableData.value.length) {
-      tableData.value[index].maxValue = value
+    if (res !== 1) {
+      uni.showToast({ title: `轮询超时，已尝试${pollCount}次`, icon: 'error' })
     }
-
-    await sleep(1000)
-  }
-
-  if (res !== 1) {
-    uni.showToast({ title: `轮询超时，已尝试${pollCount}次`, icon: 'error' })
+  } finally {
+    isMeasuring.value = false
   }
 }
 
