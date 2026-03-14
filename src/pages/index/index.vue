@@ -180,21 +180,15 @@ onMounted(() => {
     const writeRegisters = async () => {
       try {
         // 向 0x12 寄存器写入表格项总数
-        await writeWithConfirm(0x12, result.length)
+        let res = await writeWithConfirm(0x12, result.length)
+
+        uni.showToast({ title: '写总数成功' + res.length, icon: 'none' })
 
         // 根据表格项类型向寄存器写入数据，起始寄存器 0x30
         for (let index = 0; index < result.length; index++) {
           const item = result[index]
-          let value = 0
-          if (item.name === '出圈') {
-            value = 1
-          } else if (item.name === '含圈') {
-            value = 2
-          } else if (item.name === '平圈') {
-            value = 3
-          } else if (item.name === '针门') {
-            value = 0
-          }
+          const nameToValue = { '出圈': 1, '含圈': 2, '平圈': 3, '针门': 0 }
+          const value = nameToValue[item.name] ?? 0
           await writeWithConfirm(0x30 + index, value)
         }
 
