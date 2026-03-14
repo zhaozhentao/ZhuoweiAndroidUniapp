@@ -41,7 +41,7 @@
 
             <div class="grid-name">类型: {{ item.name }}</div>
 
-            <div class="grid-name">峰值:</div>
+            <div class="grid-name">峰值: {{ item.maxValue }}</div>
 
             <div class="grid-name">时间点:</div>
           </div>
@@ -202,8 +202,17 @@ async function start() {
     }
 
     // 读取路号
-    res = await readWithConfirm(0x13)
-    uni.showToast({ title: `路号 = ${res}` })
+    let index = await readWithConfirm(0x13)
+    uni.showToast({ title: `路号 = ${index}` })
+
+    // 起始的寄存器是 0x102 ，每间隔 4 个寄存器是下一个保存数值的寄存器
+    const addr = 0x102 + index * 4
+    let value = await readWithConfirm(addr)
+
+    // 更新到table的峰值中
+    if (index >= 0 && index < tableData.value.length) {
+      tableData.value[index].maxValue = value
+    }
 
     await sleep(1000)
   }
@@ -265,10 +274,10 @@ onMounted(() => {
     arranges.forEach((step) => {
       if (step.label === '组合') {
         combos.forEach((item) => {
-          result.push({ name: item.label, value: 1 })
+          result.push({ name: item.label, value: 1, maxValue: '' })
         })
       } else {
-        result.push({ name: step.label, value: 1 })
+        result.push({ name: step.label, value: 1, maxValue: '' })
       }
     })
 
