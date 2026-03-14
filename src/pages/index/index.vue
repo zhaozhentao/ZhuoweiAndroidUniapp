@@ -25,18 +25,24 @@
           <t-button @click="settings" variant="text" size="small">设置</t-button>
         </div>
 
-        <div class="grid-container" v-if="tableData.length > 0">
-          <div
-            :key="index"
-            class="grid-item"
-            v-for="(item, index) in tableData">
-            <div class="grid-index">{{ index + 1 }}</div>
+        <div v-if="tableData.length > 0">
+          <t-row>
+            <t-button theme="primary" size="small">开始测量</t-button>
+          </t-row>
 
-            <div class="grid-name">类型: {{ item.name }}</div>
+          <div class="grid-container">
+            <div
+              :key="index"
+              class="grid-item"
+              v-for="(item, index) in tableData">
+              <div class="grid-index">{{ index + 1 }}</div>
 
-            <div class="grid-name">峰值:</div>
+              <div class="grid-name">类型: {{ item.name }}</div>
 
-            <div class="grid-name">时间点:</div>
+              <div class="grid-name">峰值:</div>
+
+              <div class="grid-name">时间点:</div>
+            </div>
           </div>
         </div>
 
@@ -53,7 +59,9 @@ import TEmpty from '@tdesign/uniapp/empty/empty.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
 
+// #ifdef APP-PLUS
 const module = uni.requireNativePlugin("UsbModule")
+// #endif
 
 const eChartRef = ref(null)
 
@@ -101,15 +109,21 @@ function settings() {
 }
 
 function connect() {
+  // #ifdef APP-PLUS
   module.connect()
+  // #endif
 }
 
 function write() {
+  // #ifdef APP-PLUS
   module.write(0x30, 1)
+  // #endif
 }
 
 function read() {
+  // #ifdef APP-PLUS
   module.read(0x30)
+  // #endif
 }
 
 const msg = ref('')
@@ -125,7 +139,9 @@ function writeWithConfirm(address, value, timeout = 1000) {
     }, timeout)
 
     pendingWrite = { address, value, resolve, reject, timer }
+    // #ifdef APP-PLUS
     module.write(address, value)
+    // #endif
   })
 }
 
