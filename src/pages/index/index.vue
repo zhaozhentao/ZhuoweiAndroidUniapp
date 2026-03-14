@@ -1,6 +1,6 @@
 <template>
   <t-row class="home" style="padding-top: 24px">
-    <t-col span="8" style="border-right: 1px solid #dddbdb;">
+    <t-col span="8" style="border-right: 1px solid #eee;">
       <t-row>
         <e-chart
             ref="eChartRef"
@@ -31,20 +31,18 @@
       </div>
 
       <div style="flex: 1; overflow: auto; padding-left: 12px; padding-right: 12px;">
-        <div v-if="tableData.length > 0">
-          <div class="grid-container">
-            <div
-              :key="index"
-              class="grid-item"
-              v-for="(item, index) in tableData">
-              <div class="grid-index">{{ index + 1 }}</div>
+        <div v-if="tableData.length > 0" class="grid-container">
+          <div
+            :key="index"
+            class="grid-item"
+            v-for="(item, index) in tableData">
+            <div class="grid-index">{{ index + 1 }}</div>
 
-              <div class="grid-name">类型: {{ item.name }}</div>
+            <div class="grid-name">类型: {{ item.name }}</div>
 
-              <div class="grid-name">峰值:</div>
+            <div class="grid-name">峰值:</div>
 
-              <div class="grid-name">时间点:</div>
-            </div>
+            <div class="grid-name">时间点:</div>
           </div>
         </div>
 
