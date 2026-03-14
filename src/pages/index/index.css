@@ -42,10 +42,22 @@
   background: greenyellow; 
 }
 
+.left_panel_top {
+  display: flex;
+  justify-content: space-between;
+}
+
 .left_panel {
   display: flex; 
   flex-direction: column; 
   height: 100%;
+}
+
+.left_panel_content {
+  flex: 1;
+  overflow: auto;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 .item {

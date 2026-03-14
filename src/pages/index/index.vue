@@ -37,7 +37,7 @@
     </t-col>
 
     <t-col span="16" class="left_panel">
-      <div style="display: flex; justify-content: space-between;">
+      <div class="left_panel_top">
         <div style="padding-left: 12px;">
           <t-button
             v-if="tableData.length !== 0"
@@ -65,11 +65,12 @@
         </div>
       </div>
 
-      <div style="flex: 1; overflow: auto; padding-left: 12px; padding-right: 12px;">
+      <div class="left_panel_content">
         <div v-if="tableData.length > 0" class="grid-container">
           <div
             :key="index"
             class="grid-item"
+            @click="setting(index)"
             v-for="(item, index) in tableData">
             <div class="grid-index">
               <div>{{ index + 1 }}</div>
@@ -91,6 +92,23 @@
           description="尚未设置针门组合，连接设备后点击右上角设置"/>
       </div>
     </t-col>
+
+    <t-dialog
+      :title="dialogTitle"
+      :visible="dialogShow"
+      style="width: 200px"
+      :confirm-btn="confirmBtn"
+      @confirm="confirm">
+      <template #content>
+        <div>
+          当前值
+        </div>
+
+        <div style="margin-top: 12px">
+          调机值
+        </div>
+      </template>
+    </t-dialog>
   </t-row>
 </template>
 
@@ -101,6 +119,7 @@ import TCol from '@tdesign/uniapp/col/col.vue'
 import TEmpty from '@tdesign/uniapp/empty/empty.vue'
 import TInput from '@tdesign/uniapp/input/input.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
+import TDialog from '@tdesign/uniapp/dialog/dialog.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 // #ifdef APP-PLUS
@@ -136,6 +155,12 @@ const option = {
     }
   ]
 }
+const confirmBtn = {
+  content: '确定',
+  variant: 'base',
+}
+const dialogShow = ref(false)
+const dialogTitle = ref('')
 
 function initEChart() {
   eChartRef.value.init(option)
@@ -145,10 +170,20 @@ function settings() {
   uni.navigateTo({ url: '/pages/settings/index' })
 }
 
+function setting(index) {
+  dialogShow.value = true
+
+  dialogTitle.value = `${index + 1}${tableData.value[index].name} 调试`
+}
+
 function connect() {
   // #ifdef APP-PLUS
   module.connect()
   // #endif
+}
+
+function confirm() {
+  dialogShow.value = false
 }
 
 function onChuChange(value) {
@@ -266,6 +301,7 @@ async function start() {
 }
 
 onMounted(() => {
+  // #ifdef APP-PLUS
   plus.globalEvent.addEventListener('usb_data', e => {
     const hexString = e.data
     const byteArray = []
@@ -303,6 +339,7 @@ onMounted(() => {
       icon: 'none'
     })
   })
+  // #endif
 
   uni.$on('configSelect', async (data) => {
     // 保存数据时，已经做了非空校验
