@@ -105,13 +105,13 @@
 </template>
 
 <script setup>
+import { sleep } from '@/utils/helpers'
 import TRow from '@tdesign/uniapp/row/row.vue'
 import TCol from '@tdesign/uniapp/col/col.vue'
 import TEmpty from '@tdesign/uniapp/empty/empty.vue'
 import TInput from '@tdesign/uniapp/input/input.vue'
 import TButton from '@tdesign/uniapp/button/button.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { sleep } from '@/utils/helpers'
 
 // #ifdef APP-PLUS
 const module = uni.requireNativePlugin("UsbModule")
@@ -120,11 +120,13 @@ const module = uni.requireNativePlugin("UsbModule")
 const chu = ref('')
 const han = ref('')
 const ping = ref('')
-
+let pendingWrite = null
+let pendingRead = null
+const currentIndex = ref(0)
+const isMeasuring = ref(false)
+const currentReadValue = ref(0)
 const eChartRef = ref(null)
-
 const tableData = ref([])
-
 const option = {
   title: {
     text: '大圆机',
@@ -170,16 +172,6 @@ function onHanChange(value) {
 function onPingChange(value) {
   ping.value = value.value
 }
-
-const currentIndex = ref(0)
-
-const currentReadValue = ref(0)
-
-const isMeasuring = ref(false)
-
-let pendingWrite = null
-
-let pendingRead = null
 
 // 带确认的写入函数
 function writeWithConfirm(address, value, timeout = 1000) {
