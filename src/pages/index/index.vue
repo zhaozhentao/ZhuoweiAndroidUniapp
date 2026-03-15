@@ -34,6 +34,15 @@
         @change="onPingChange"
         placeholder="请输入"
         type="number"/>
+
+      <t-input
+        id="ping"
+        :value="rongCha"
+        label="容差"
+        align="right"
+        @change="onRongChaChange"
+        placeholder="请输入"
+        type="number"/>
     </t-col>
 
     <t-col span="16" class="left_panel">
@@ -74,6 +83,8 @@
             v-for="(item, index) in tableData">
             <div class="grid-index">
               <div>{{ index + 1 }}</div>
+
+              <div>{{ getStatus(item) }}</div>
 
               <div v-if="index === currentIndex && isMeasuring" class="indicator"/>
             </div>
@@ -141,6 +152,7 @@ const exceptionValue = ref(0)
 const chu = ref('')
 const han = ref('')
 const ping = ref('')
+const rongCha = ref('')
 const currentIndex = ref(0)
 const isMeasuring = ref(false)
 const currentReadValue = ref(0)
@@ -239,6 +251,17 @@ function onHanChange(value) {
 
 function onPingChange(value) {
   ping.value = value.value
+}
+
+function onRongChaChange(value) {
+  rongCha.value = value.value
+}
+
+function getStatus(item) {
+  // return '❌'
+  // return '✅'
+  // return '⚠️'
+  return ''
 }
 
 // 带确认的写入函数

@@ -14,7 +14,7 @@
 
 .grid-index {
   color: #999;
-  font-size: 12px;
+  font-size: 18px;
   margin-bottom: 4px;
   display: flex;
   align-items: center;
@@ -63,4 +63,8 @@
 .item {
   padding-top: 6px;
   padding-bottom: 6px;
+}
+
+.green {
+  background: #E6F7E8;
 }
