@@ -109,7 +109,7 @@
           <span>调机值</span>
           
           <span style="margin-left: 12px;">
-            {{  }}
+            {{ exceptionValue }}
           </span>
         </div>
       </template>
@@ -136,6 +136,8 @@ let pendingWrite = null
 let pendingRead = null
 let readValueTimer = null
 
+// 调机值
+const exceptionValue = ref(0)
 const chu = ref('')
 const han = ref('')
 const ping = ref('')
@@ -180,8 +182,20 @@ function settings() {
 
 function setting(index) {
   dialogShow.value = true
+  let type = tableData.value[index].name
+  dialogTitle.value = `${index + 1}${type} 调试`
 
-  dialogTitle.value = `${index + 1}${tableData.value[index].name} 调试`
+  switch (type) {
+    case '出圈':
+      exceptionValue.value = chu.value
+      break
+    case '含圈':
+      exceptionValue.value = han.value
+      break
+    case '平圈':
+      exceptionValue.value = ping.value
+      break
+  }
 
   // 启动定时器，每隔1秒读取当前值
   readValueTimer = setInterval(async () => {
