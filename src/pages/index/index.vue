@@ -339,13 +339,24 @@ onMounted(() => {
       byteArray.push(parseInt(byte, 16))
     }
 
-    // 处理读取响应（7个16进制数）
-    if (pendingRead && byteArray.length === 7) {
-      clearTimeout(pendingRead.timer)
-      const value = (byteArray[3] << 8) | byteArray[4]
-      pendingRead.resolve(value)
-      pendingRead = null
-      return
+    // 处理读取响应
+    if (pendingRead && byteArray.length >= 3) {
+      const dataLength = byteArray[2] // 报文中的数据长度字段
+      const expectedLength = 3 + dataLength // 前3字节 + 数据长度
+
+      if (byteArray.length >= expectedLength) {
+        clearTimeout(pendingRead.timer)
+
+        // 根据数据长度动态解析数据（大端序）
+        let value = 0
+        for (let i = 0; i < dataLength; i++) {
+          value = (value << 8) | byteArray[3 + i]
+        }
+
+        pendingRead.resolve(value)
+        pendingRead = null
+        return
+      }
     }
 
     // 处理写确认
