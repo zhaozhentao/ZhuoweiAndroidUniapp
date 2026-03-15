@@ -187,7 +187,7 @@ function setting(index) {
   readValueTimer = setInterval(async () => {
     try {
       // #ifdef APP-PLUS
-      currentReadValue.value = await readWithConfirm(currentValueRegister)
+      currentReadValue.value = await readWithConfirm(currentValueRegister, 2)
       // #endif
     } catch (error) {
       console.error('读取当前值失败:', error)
@@ -202,7 +202,7 @@ function connect() {
 }
 
 async function modifyCurrentValue() {
-  await writeWithConfirm(currentValueRegister, 0x123, 4)
+  await writeWithConfirm(currentValueRegister, 0x12345678, 4)
 }
 
 function confirm() {
@@ -243,7 +243,7 @@ function writeWithConfirm(address, value, length, timeout = 1000) {
 }
 
 // 带确认的读取函数
-function readWithConfirm(address, timeout = 1000) {
+function readWithConfirm(address, count = 1, timeout = 1000) {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       pendingRead = null
@@ -252,7 +252,7 @@ function readWithConfirm(address, timeout = 1000) {
 
     pendingRead = { address, resolve, reject, timer }
     // #ifdef APP-PLUS
-    module.read(address)
+    module.read(address, count)
     // #endif
   })
 }
@@ -311,7 +311,7 @@ async function start() {
       }
 
       // 读取当前值
-      currentReadValue.value = await readWithConfirm(currentValueRegister)
+      currentReadValue.value = await readWithConfirm(currentValueRegister, 2)
 
       await sleep(1000)
     }
