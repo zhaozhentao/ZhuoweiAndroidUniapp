@@ -54,7 +54,7 @@
             theme="primary"
             size="small"
             @click="inc">
-            设置路号
+            下一路
           </t-button>
         </div>
 
