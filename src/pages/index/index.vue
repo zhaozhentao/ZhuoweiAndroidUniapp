@@ -38,9 +38,18 @@
       <t-input
         id="ping"
         :value="rongCha"
-        label="容差"
+        label="最大容差"
         align="right"
         @change="onRongChaChange"
+        placeholder="请输入"
+        type="number"/>
+
+      <t-input
+        id="ping"
+        :value="rongCha2"
+        label="合格容差"
+        align="right"
+        @change="onRongCha2Change"
         placeholder="请输入"
         type="number"/>
     </t-col>
@@ -89,11 +98,11 @@
               <div v-if="index === currentIndex && isMeasuring" class="indicator"/>
             </div>
 
-            <div class="grid-name">类型: {{ item.name }}</div>
+            <div class="grid-name">类型  : {{ item.name }}</div>
 
-            <div class="grid-name">峰值: {{ item.maxValue }}</div>
+            <div class="grid-name">测量值: {{ item.maxValue }}</div>
 
-            <div class="grid-name">时间点:</div>
+<!--            <div class="grid-name">时间点:</div>-->
           </div>
         </div>
 
@@ -153,6 +162,7 @@ const chu = ref('')
 const han = ref('')
 const ping = ref('')
 const rongCha = ref('')
+const rongCha2 = ref('')
 const currentIndex = ref(0)
 const isMeasuring = ref(false)
 const currentReadValue = ref(0)
@@ -257,11 +267,42 @@ function onRongChaChange(value) {
   rongCha.value = value.value
 }
 
+function onRongCha2Change(value) {
+  rongCha2.value = value.value
+}
+
 function getStatus(item) {
-  // return '❌'
-  // return '✅'
-  // return '⚠️'
-  return ''
+  let compareValue
+
+  switch (item.name) {
+    case '出圈':
+      compareValue = chu.value
+      break
+    case '含圈':
+      compareValue = han.value
+      break
+    case '平圈':
+      compareValue = ping.value
+      break
+    case '针门':
+      return ''
+  }
+
+  if (item.maxValue == null || rongCha.value == null || rongCha2.value == null || compareValue == null) {
+    return ''
+  }
+
+  let diff = Math.abs(item.maxValue - compareValue)
+
+  if (diff >= rongCha.value) {
+    return '❌'
+  }
+
+  if (diff < rongCha.value && diff >= rongCha2.value) {
+    return '⚠️'
+  }
+
+  return '✅'
 }
 
 // 带确认的写入函数
@@ -436,10 +477,10 @@ onMounted(() => {
     arranges.forEach((step) => {
       if (step.label === '组合') {
         combos.forEach((item) => {
-          result.push({ name: item.label, value: 1, maxValue: '' })
+          result.push({ name: item.label, value: 1, maxValue: null })
         })
       } else {
-        result.push({ name: step.label, value: 1, maxValue: '' })
+        result.push({ name: step.label, value: 1, maxValue: null })
       }
     })
 
