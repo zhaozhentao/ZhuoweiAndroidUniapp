@@ -108,10 +108,10 @@
         <div style="margin-top: 12px">
           <span>调机值</span>
           
-          <span style="margin-left: 12px;">0</span>
+          <span style="margin-left: 12px;">
+            {{  }}
+          </span>
         </div>
-
-        <t-button @click="modifyCurrentValue" style="margin-top: 12px;" theme="primary" size="small">DEBUG 修改当前值</t-button>
       </template>
     </t-dialog>
   </t-row>
@@ -199,10 +199,6 @@ function connect() {
   // #ifdef APP-PLUS
   module.connect()
   // #endif
-}
-
-async function modifyCurrentValue() {
-  await writeWithConfirm(currentValueRegister, 0x12345678, 4)
 }
 
 function confirm() {
