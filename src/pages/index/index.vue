@@ -101,12 +101,17 @@
       @confirm="confirm">
       <template #content>
         <div>
-          当前值
+          <span>当前值</span>
+          <span style="margin-left: 12px;">{{ currentReadValue }}</span>
         </div>
 
         <div style="margin-top: 12px">
-          调机值
+          <span>调机值</span>
+          
+          <span style="margin-left: 12px;">0</span>
         </div>
+
+        <t-button @click="modifyCurrentValue" style="margin-top: 12px;" theme="primary" size="small">DEBUG 修改当前值</t-button>
       </template>
     </t-dialog>
   </t-row>
@@ -128,6 +133,7 @@ const module = uni.requireNativePlugin("UsbModule")
 
 let pendingWrite = null
 let pendingRead = null
+let readValueTimer = null
 const chu = ref('')
 const han = ref('')
 const ping = ref('')
@@ -174,6 +180,17 @@ function setting(index) {
   dialogShow.value = true
 
   dialogTitle.value = `${index + 1}${tableData.value[index].name} 调试`
+
+  // 启动定时器，每隔1秒读取当前值
+  readValueTimer = setInterval(async () => {
+    try {
+      // #ifdef APP-PLUS
+      currentReadValue.value = await readWithConfirm(0x15)
+      // #endif
+    } catch (error) {
+      console.error('读取当前值失败:', error)
+    }
+  }, 1000)
 }
 
 function connect() {
@@ -182,7 +199,17 @@ function connect() {
   // #endif
 }
 
+async function modifyCurrentValue() {
+  await writeWithConfirm(0x015, 123)
+}
+
 function confirm() {
+  // 清除定时器
+  if (readValueTimer) {
+    clearInterval(readValueTimer)
+    readValueTimer = null
+  }
+
   dialogShow.value = false
 }
 
