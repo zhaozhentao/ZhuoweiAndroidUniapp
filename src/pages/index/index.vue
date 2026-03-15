@@ -181,9 +181,7 @@ function settings() {
 }
 
 function setting(index) {
-  dialogShow.value = true
   let type = tableData.value[index].name
-  dialogTitle.value = `${index + 1}${type} 调试`
 
   switch (type) {
     case '出圈':
@@ -195,7 +193,13 @@ function setting(index) {
     case '平圈':
       exceptionValue.value = ping.value
       break
+    case '针门':
+      uni.showToast({ title: '针门不需要调试', icon: 'none' })
+      return
   }
+
+  dialogShow.value = true
+  dialogTitle.value = `${index + 1}${type} 调试`
 
   // 启动定时器，每隔1秒读取当前值
   readValueTimer = setInterval(async () => {
