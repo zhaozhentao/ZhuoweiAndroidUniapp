@@ -131,9 +131,11 @@ import { onMounted, onUnmounted, ref } from 'vue'
 const module = uni.requireNativePlugin("UsbModule")
 // #endif
 
+const currentValueRegister = 0x15
 let pendingWrite = null
 let pendingRead = null
 let readValueTimer = null
+
 const chu = ref('')
 const han = ref('')
 const ping = ref('')
@@ -185,7 +187,7 @@ function setting(index) {
   readValueTimer = setInterval(async () => {
     try {
       // #ifdef APP-PLUS
-      currentReadValue.value = await readWithConfirm(0x15)
+      currentReadValue.value = await readWithConfirm(currentValueRegister)
       // #endif
     } catch (error) {
       console.error('读取当前值失败:', error)
@@ -200,7 +202,7 @@ function connect() {
 }
 
 async function modifyCurrentValue() {
-  await writeWithConfirm(0x015, 123)
+  await writeWithConfirm(currentValueRegister, 0x123, 4)
 }
 
 function confirm() {
@@ -226,7 +228,7 @@ function onPingChange(value) {
 }
 
 // 带确认的写入函数
-function writeWithConfirm(address, value, timeout = 1000) {
+function writeWithConfirm(address, value, length, timeout = 1000) {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       pendingWrite = null
@@ -235,7 +237,7 @@ function writeWithConfirm(address, value, timeout = 1000) {
 
     pendingWrite = { address, value, resolve, reject, timer }
     // #ifdef APP-PLUS
-    module.write(address, value)
+    module.write(address, value, length)
     // #endif
   })
 }
@@ -265,7 +267,7 @@ async function inc() {
     // 递增，但不超过表格元素数量
     let value = (currentIndex.value + 1) % tableData.value.length
 
-    await writeWithConfirm(0x13, value)
+    await writeWithConfirm(0x13, value, 2)
 
     let res = await readWithConfirm(0x13)
 
@@ -281,10 +283,10 @@ async function start() {
 
   try {
     // 清空寄存器
-    let res = await writeWithConfirm(0x11, 0x55)
+    await writeWithConfirm(0x11, 0x55, 2)
 
     // 打开运行开关
-    res = await writeWithConfirm(0xf9, 0x1)
+    let res = await writeWithConfirm(0xf9, 0x1, 2)
 
     // 轮询最多100次，直到读取到结果为1
     let pollCount = 0
@@ -309,7 +311,7 @@ async function start() {
       }
 
       // 读取当前值
-      currentReadValue.value = await readWithConfirm(0x15)
+      currentReadValue.value = await readWithConfirm(currentValueRegister)
 
       await sleep(1000)
     }
@@ -390,14 +392,14 @@ onMounted(() => {
     const writeRegisters = async () => {
       try {
         // 向 0x12 寄存器写入表格项总数
-        await writeWithConfirm(0x12, result.length)
+        await writeWithConfirm(0x12, result.length, 2)
 
         // 根据表格项类型向寄存器写入数据，起始寄存器 0x30
         for (let index = 0; index < result.length; index++) {
           const item = result[index]
           const nameToValue = { '出圈': 1, '含圈': 2, '平圈': 3, '针门': 0 }
           const value = nameToValue[item.name] ?? 0
-          await writeWithConfirm(0x30 + index, value)
+          await writeWithConfirm(0x30 + index, value, 2)
         }
 
         return 'ok'
