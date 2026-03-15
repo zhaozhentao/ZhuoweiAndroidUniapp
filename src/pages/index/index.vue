@@ -235,7 +235,7 @@ function writeWithConfirm(address, value, length, timeout = 1000) {
       reject(new Error(`写入超时: 0x${address.toString(16)}`))
     }, timeout)
 
-    pendingWrite = { address, value, resolve, reject, timer }
+    pendingWrite = { address, value, resolve, reject, timer, length }
     // #ifdef APP-PLUS
     module.write(address, value, length)
     // #endif
@@ -364,7 +364,14 @@ onMounted(() => {
       const respAddress = (byteArray[2] << 8) | byteArray[3]
       const respValue = (byteArray[4] << 8) | byteArray[5]
 
-      if (respAddress === pendingWrite.address && respValue === pendingWrite.value) {
+      // 根据写入长度判断响应格式
+      // length <= 2: 写单个寄存器(0x06)，响应回显地址和值
+      // length > 2: 写多个寄存器(0x10)，响应返回地址和寄存器数量
+      const isMatch = pendingWrite.length <= 2
+        ? (respAddress === pendingWrite.address && respValue === pendingWrite.value)
+        : (respAddress === pendingWrite.address && respValue === (pendingWrite.length / 2))
+
+      if (isMatch) {
         clearTimeout(pendingWrite.timer)
         pendingWrite.resolve(byteArray)
         pendingWrite = null
